@@ -13,6 +13,8 @@ import com.jibe.repository.BankAccountRepository;
 public class BankAccountService {
 
     private final BankAccountRepository bankRepo;
+    //private long autoSetAccountNum = 10001; //Next Task is to add feature that one user can hold many accounts.
+
 
     public BankAccountService() {
         this.bankRepo = new BankAccountRepository();
@@ -52,13 +54,13 @@ public class BankAccountService {
     public void withdraw(long accountNumber, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {
 
         if (amount > getBalance(accountNumber)) {
-            throw new InvalidAmountException("Amount must be greater than balance!");
+            throw new InvalidAmountException("Amount must be greater than zero!");
         }
 
         BankAccount account = findAccountNumber(accountNumber);
         
         if (amount <= 0 ) {
-             throw new InvalidAmountException("Amount must be greater than balance!");
+             throw new InvalidAmountException("Amount must not be negative!");
         }
         
         account.withdraw(amount);
@@ -66,13 +68,9 @@ public class BankAccountService {
     }
 
     public BankAccount getAccountInformation(long accountNumber) throws BankAccountDoNotExistsException {
-        BankAccount account = findAccountNumber(accountNumber);
+        return findAccountNumber(accountNumber);
 
-        if (account != null) {
-            return account;
-        } else {
-            throw new BankAccountDoNotExistsException("Account do not exists!");
-        }
+
 
     }
 

@@ -16,7 +16,7 @@ import java.util.Map;
 public class UserService {
     private final BankAccountService bankService;
     private final UserRepository users;
-    long autoSetId = 1001;
+    private long autoSetId = 1001;
 
     public UserService(BankAccountService service) {
         this.users = new UserRepository();
