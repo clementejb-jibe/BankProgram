@@ -52,16 +52,17 @@ public class BankAccountService {
     }
 
     public void withdraw(long accountNumber, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {
+        if (amount <= 0 ) {
+            throw new InvalidAmountException("Amount must not be negative!");
+        }
 
         if (amount > getBalance(accountNumber)) {
-            throw new InvalidAmountException("Amount must be greater than zero!");
+            throw new InvalidAmountException("Insufficient funds!");
         }
 
         BankAccount account = findAccountNumber(accountNumber);
         
-        if (amount <= 0 ) {
-             throw new InvalidAmountException("Amount must not be negative!");
-        }
+
         
         account.withdraw(amount);
 
