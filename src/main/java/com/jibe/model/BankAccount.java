@@ -9,33 +9,27 @@ package com.jibe.model;
  * @author Win11
  */
 public class BankAccount {
-    private long accountNumber;
-    private User user;
+    private final long accountNumber;
+    private final int pin;
+    private final User user;
     private double balance = 0;
-    
-    
-    
-    public BankAccount(long accountNumber,User user) {
-        this.accountNumber = accountNumber;
-        this.user = user;
 
-//this.user = new User(accountNumber, user.getPasscode());
+    public BankAccount(long accountNumber, int pin, User user) {
+        this.accountNumber = accountNumber;
+        this.pin = pin;
+        this.user = user;
     }
 
     public long getAccountNumber() {
         return accountNumber;
     }
 
-    public void setAccountNumber(long accountNumber) {
-        this.accountNumber = accountNumber;
+    public int getPin() {
+        return pin;
     }
 
     public User getUser() {
         return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     public double getBalance() {
@@ -45,16 +39,15 @@ public class BankAccount {
     public void deposit(double amount) {
         this.balance += amount;
     }
-    
+
     public void withdraw(double amount) {
         this.balance -= amount;
     }
 
     @Override
     public String toString() {
-        return "BankAccount{" + "accountNumber = " + accountNumber + ", user = " + user + ", balance = " + balance + '}';
+        return getUser() + "{BankAccount | " + "accountNumber = " + accountNumber + ", balance = " + balance + '}';
     }
-    
-    
-    
+
+
 }

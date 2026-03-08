@@ -12,10 +12,13 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner scan = new Scanner(System.in);
+
         BankAccountService bankService = new BankAccountService();
-        BankAccountController bankController = new BankAccountController(bankService, scan);
-        UserService userService = new UserService(bankService);
-        UserController userController = new UserController(userService, bankController);
+        UserService userService = new UserService();
+
+        BankAccountController bankController = new BankAccountController(bankService, userService,scan);
+        UserController userController = new UserController(userService, bankController, scan);
+
         BankApplication app = new BankApplication(userController);
 
         app.start();

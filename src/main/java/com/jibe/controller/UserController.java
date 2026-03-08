@@ -22,20 +22,21 @@ import java.util.Scanner;
 public class UserController {
 
     private final UserService userService;
-    private final Scanner scan = new Scanner(System.in);
+    private final Scanner scan;
     private final BankAccountController bankController;
 
-    public UserController(UserService service, BankAccountController bankController) {
+    public UserController(UserService service, BankAccountController bankController, Scanner scan) {
         this.userService = service;
         this.bankController = bankController;
+        this.scan = scan;
     }
 
     //Menu methods use for homeMenu
     //Register
     private void registerMenu() {
 
-            while (true) {
-                try {
+        while (true) {
+            try {
                 System.out.println("REGISTER ACCOUNT");
 
                 System.out.print("Create Passcode: ");
@@ -47,11 +48,11 @@ public class UserController {
                 userService.registerUser(enteredPasscode, passcodeConfirmation);
                 System.out.println("Account Created Successfully!");
                 return;
-                } catch (PasscodeNotMatchException e) {
-                    System.out.println(e.getMessage());
+            } catch (PasscodeNotMatchException e) {
+                System.out.println(e.getMessage());
 
-                }
             }
+        }
 
 
     }
@@ -60,29 +61,26 @@ public class UserController {
     private User loginAccount() throws UserNotFoundException {
 
         var attempts = 3;
+        while (attempts > 0) {
 
-
-
-            while (attempts > 0) {
-
-                try {
-                    System.out.print("Enter User ID: ");
-                    var enteredUserId = scan.nextInt();
+            try {
+                System.out.print("Enter User ID: ");
+                var enteredUserId = scan.nextInt();
                 scan.nextLine();
 
                 System.out.print("Enter Passcode: ");
                 var enteredPasscode = scan.nextLine();
 
                 return userService.loginUser(enteredUserId, enteredPasscode);
-                } catch (InvalidPasscodeException e) {
-                    --attempts;
-                    System.out.println(e.getMessage() + " Attempts left: " + attempts);
+            } catch (InvalidPasscodeException e) {
+                --attempts;
+                System.out.println(e.getMessage() + " Attempts left: " + attempts);
 
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input, please try again!");
-                    scan.next();
-                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, please try again!");
+                scan.next();
             }
+        }
 
 
         System.out.println("Login failed, too many attempts!");
@@ -126,7 +124,7 @@ public class UserController {
 
         Map<Long, User> registeredUsers = userService.getAll();
 
-        if(registeredUsers.isEmpty()) {
+        if (registeredUsers.isEmpty()) {
             System.out.println("No Registered User!");
         } else {
             registeredUsers.forEach((_, user) -> System.out.println(user));
@@ -147,15 +145,15 @@ public class UserController {
 
         var homeMenuRunning = true;
 
-            while (homeMenuRunning) {
-                try {
+        while (homeMenuRunning) {
+            try {
                 System.out.println("""
-                           HOME MENU
-                           1. Register Account
-                           2. Login
-                           3. Exit
-                           4. Find Account
-                           5. Check Account (For Debugging)""");
+                        HOME MENU
+                        1. Register Account
+                        2. Login
+                        3. Exit
+                        4. Find Account
+                        5. Check Account (For Debugging)""");
                 System.out.print("Select: ");
 
                 var selectOption = scan.nextInt();
@@ -163,8 +161,7 @@ public class UserController {
                 scan.nextLine();
 
                 switch (selectOption) {
-                    case 1 ->
-                        registerMenu(); //Register Account
+                    case 1 -> registerMenu(); //Register Account
 
                     case 2 -> {
                         User loggedinUser = loginAccount();
@@ -172,30 +169,25 @@ public class UserController {
                         if (loggedinUser != null) {
                             System.out.println("Successful Login!");
                             //BankController menus
-                            bankController.bankMainMenu(loggedinUser);
+                            bankController.bankAccountHomeMenu(loggedinUser);
                         }
 
                     }
-                    case 3 ->
-                       homeMenuRunning = false;
+                    case 3 -> homeMenuRunning = false;
 
-                    case 4 ->
-                        findUserById();
-                    case 5 ->
-                        getAll();
+                    case 4 -> findUserById();
+                    case 5 -> getAll();
 
-                    default ->
-                        System.out.println("Option is not on the selection, please try again!");
+                    default -> System.out.println("Option is not on the selection, please try again!");
 
                 }
-                } catch (InputMismatchException e) {
-                    System.out.println("Invalid input, please try again!");
-                    scan.next();
-                } catch (UserNotFoundException e) {
-                    System.out.println(e.getMessage());
-                }
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, please try again!");
+                scan.next();
+            } catch (UserNotFoundException e) {
+                System.out.println(e.getMessage());
             }
-
+        }
 
 
     }

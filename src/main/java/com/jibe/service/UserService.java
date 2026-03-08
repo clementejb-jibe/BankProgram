@@ -1,12 +1,15 @@
 package com.jibe.service;
 
 
+import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.InvalidPasscodeException;
 import com.jibe.exceptions.PasscodeNotMatchException;
 import com.jibe.exceptions.UserNotFoundException;
+import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.repository.UserRepository;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,13 +17,13 @@ import java.util.Map;
  * @author Win11
  */
 public class UserService {
-    private final BankAccountService bankService;
+
     private final UserRepository users;
     private long autoSetId = 1001;
 
-    public UserService(BankAccountService service) {
+    public UserService() {
         this.users = new UserRepository();
-        this.bankService = service;
+
     }
 
     
@@ -35,8 +38,6 @@ public class UserService {
         User newUser = new User(autoSetId, passcode);
 
         users.save(autoSetId, newUser);
-        
-        bankService.createBankAccountForUser(newUser);
         
         autoSetId++;
 
@@ -55,7 +56,14 @@ public class UserService {
         }
     }
 
-    
+    //Fetch All Bank Accounts that is belonged to the User
+    public List<BankAccount> getAllBankAccounts(User user) throws BankAccountDoNotExistsException {
+
+        if (user.getBankAccounts().isEmpty()) {
+            throw new BankAccountDoNotExistsException("No registered bank accounts found!");
+        }
+        return user.getBankAccounts();
+    }
    
     public Map<Long, User> getAll(){
         return users.getAll();

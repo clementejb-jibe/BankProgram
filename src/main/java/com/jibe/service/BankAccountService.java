@@ -3,7 +3,9 @@ package com.jibe.service;
 
 import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.InvalidAmountException;
-import com.jibe.model.*;
+import com.jibe.exceptions.InvalidPinException;
+import com.jibe.model.BankAccount;
+import com.jibe.model.User;
 import com.jibe.repository.BankAccountRepository;
 
 /**
@@ -13,7 +15,7 @@ import com.jibe.repository.BankAccountRepository;
 public class BankAccountService {
 
     private final BankAccountRepository bankRepo;
-    //private long autoSetAccountNum = 10001; //Next Task is to add feature that one user can hold many accounts.
+    private long autoSetAccountNum = 10001; //Next Task is to add feature that one user can hold many accounts.
 
 
     public BankAccountService() {
@@ -29,11 +31,13 @@ public class BankAccountService {
         return bankRepo.findAccountNumber(accountNumber);
     }
 
-    public void createBankAccountForUser(User user) {
+    public void createBankAccount(int pin, User user) {
 
-        BankAccount newAccount = new BankAccount(user.getUserId(), user);
-        
+        BankAccount newAccount = new BankAccount(autoSetAccountNum, pin, user);
+
         bankRepo.save(newAccount.getAccountNumber(), newAccount);
+        user.addBankAccount(newAccount);
+        autoSetAccountNum++;
     }
 
     public double getBalance(long accountNumber) {
@@ -47,12 +51,12 @@ public class BankAccountService {
         }
 
         BankAccount account = findAccountNumber(accountNumber);
-        
+
         account.deposit(amount);
     }
 
     public void withdraw(long accountNumber, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {
-        if (amount <= 0 ) {
+        if (amount <= 0) {
             throw new InvalidAmountException("Amount must not be negative!");
         }
 
@@ -61,18 +65,34 @@ public class BankAccountService {
         }
 
         BankAccount account = findAccountNumber(accountNumber);
-        
 
-        
+
         account.withdraw(amount);
 
     }
 
-    public BankAccount getAccountInformation(long accountNumber) throws BankAccountDoNotExistsException {
-        return findAccountNumber(accountNumber);
 
+    //Check Pin if valid
+    public boolean checkPin(int pin) {
 
+        if (pin >= 1000 && pin <= 9999) {
+            return true;
+        } else {
+            throw new InvalidPinException("Invalid PIN. Please enter a 4-digit PIN (1000–9999)");
+        }
 
     }
+
+    //Login
+    public BankAccount login(long accountNumber, int pin) throws InvalidPinException, BankAccountDoNotExistsException {
+        BankAccount accNum = findAccountNumber(accountNumber);
+
+        if (accNum != null &&  accNum.getPin() == pin) {
+            return accNum;
+        }  else {
+            throw new InvalidPinException("Incorrect PIN!");
+        }
+    }
+
 
 }

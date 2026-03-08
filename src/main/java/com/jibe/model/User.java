@@ -4,6 +4,9 @@
  */
 package com.jibe.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Win11
@@ -11,9 +14,8 @@ package com.jibe.model;
 public class User {
 
     private final long userId;
-    private String name;
     private final String passcode;
-    //private BankAccount account;
+    private final List<BankAccount> bankAccounts = new ArrayList<>();
 
     public User(long userId, String passcode) {
         this.userId = userId;
@@ -25,37 +27,23 @@ public class User {
         return userId;
     }
 
-    public String getName() {
-        return name;
-    }
-
     public String getPasscode() {
         return passcode;
     }
 
-    /*
-    Setter
-    
-    public User setUserId(Long id) {
-        this.userId = id;
-        return this;
+    //Get All Accounts
+    public List<BankAccount> getBankAccounts() {
+        return bankAccounts;
     }
 
-    public User setName(String name) {
-        this.name = name;
-        return this;
+    //Add Bank Account
+    public void addBankAccount(BankAccount bankAccount) {
+        this.bankAccounts.add(bankAccount);
     }
 
-    public User setPasscode(String passcode) {
-        this.passcode = passcode;
-        return this;
-    }
-
-     */
-    
     @Override
     public String toString() {
-        return "User ID: " + getUserId() + "Passcode: " + getPasscode().hashCode();
+        return "User ID: " + getUserId();
     }
 
 }
