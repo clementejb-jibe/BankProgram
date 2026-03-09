@@ -75,10 +75,13 @@ public class UserController {
             }catch (InputMismatchException e) {
                 System.out.println("Invalid input, please try again!");
                 scan.next();
-            } catch (InvalidPasscodeException e) {
+            } catch (UserNotFoundException e) {
+                System.out.println(e.getMessage());
+                //scan.next();
+            }
+            catch (InvalidPasscodeException e) {
                 --attempts;
                 System.out.println(e.getMessage() + " Attempts left: " + attempts);
-
             }
         }
 
