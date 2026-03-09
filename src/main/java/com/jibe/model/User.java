@@ -26,7 +26,7 @@ public class User {
     public long getUserId() {
         return userId;
     }
-
+    //Get Passcode
     public String getPasscode() {
         return passcode;
     }

@@ -6,6 +6,7 @@ package com.jibe.controller;
 
 
 import com.jibe.exceptions.InvalidPasscodeException;
+import com.jibe.exceptions.LoginFailedException;
 import com.jibe.exceptions.PasscodeNotMatchException;
 import com.jibe.exceptions.UserNotFoundException;
 import com.jibe.model.User;
@@ -33,7 +34,7 @@ public class UserController {
 
     //Menu methods use for homeMenu
     //Register
-    private void registerMenu() {
+    private void registerUser() {
 
         while (true) {
             try {
@@ -58,8 +59,7 @@ public class UserController {
     }
 
     //Login
-    private User loginAccount() throws UserNotFoundException {
-
+    private User loginUser() throws UserNotFoundException {
         var attempts = 3;
         while (attempts > 0) {
 
@@ -72,19 +72,17 @@ public class UserController {
                 var enteredPasscode = scan.nextLine();
 
                 return userService.loginUser(enteredUserId, enteredPasscode);
+            }catch (InputMismatchException e) {
+                System.out.println("Invalid input, please try again!");
+                scan.next();
             } catch (InvalidPasscodeException e) {
                 --attempts;
                 System.out.println(e.getMessage() + " Attempts left: " + attempts);
 
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please try again!");
-                scan.next();
             }
         }
 
-
-        System.out.println("Login failed, too many attempts!");
-        return null;
+        throw new LoginFailedException("Login failed, too many attempts!");
     }
 
     //FindUserById
@@ -161,10 +159,10 @@ public class UserController {
                 scan.nextLine();
 
                 switch (selectOption) {
-                    case 1 -> registerMenu(); //Register Account
+                    case 1 -> registerUser(); //Register Account
 
                     case 2 -> {
-                        User loggedinUser = loginAccount();
+                        User loggedinUser = loginUser();
 
                         if (loggedinUser != null) {
                             System.out.println("Successful Login!");

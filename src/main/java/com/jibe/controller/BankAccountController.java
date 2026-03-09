@@ -176,7 +176,8 @@ public class BankAccountController {
                         1. Create Bank Account
                         2. Login Bank Account
                         3. View My Accounts
-                        4. Back""");
+                        4. Sign Out
+                        5. Exit""");
                 System.out.print("Select: ");
                 var options = scan.nextInt();
 
@@ -184,15 +185,12 @@ public class BankAccountController {
                     case 1 -> createBankAccount(loggedInUser);
                     case 2 -> {
                         BankAccount loggedInAccount = loginBankAccount(loggedInUser);
-
-                        if (loggedInAccount != null) {
-                            bankMenu(loggedInAccount);
-                        }
+                        if (loggedInAccount != null) bankMenu(loggedInAccount);
                     }
                     case 3 -> getAllAccount(loggedInUser);
-                    case 4 -> {
-                        return;
-                    }
+                    case 4 -> {return;}
+                    case 5 -> System.exit(0);
+
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input!");
