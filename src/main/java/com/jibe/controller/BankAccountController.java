@@ -1,9 +1,8 @@
 
 package com.jibe.controller;
 
-import com.jibe.exceptions.BankAccountDoNotExistsException;
-import com.jibe.exceptions.InvalidAmountException;
-import com.jibe.exceptions.InvalidPinException;
+import com.jibe.controller.impl.BankAccountControllerInterface;
+import com.jibe.exceptions.*;
 import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.service.BankAccountService;
@@ -16,7 +15,7 @@ import java.util.Scanner;
  *
  * @author Win11
  */
-public class BankAccountController {
+public class BankAccountController implements BankAccountControllerInterface {
 
     private final BankAccountService bankService;
     private final Scanner scan;
@@ -29,8 +28,15 @@ public class BankAccountController {
         this.userService = userService;
     }
 
-    //Deposit Interface
-    public void depositMenu(BankAccount loggedInAccount) {
+
+    /*
+     *
+     * Bank Operators ( getBalance, deposit, withdraw)
+     *
+     */
+
+    //Deposit
+    public void deposit(BankAccount loggedInAccount) {
 
         while (true) {
             try {
@@ -55,6 +61,7 @@ public class BankAccountController {
         }
     }
 
+    //Withdraw
     public void withdraw(BankAccount loggedInAccount) {
 
         long accountNumber = loggedInAccount.getAccountNumber();
@@ -82,39 +89,54 @@ public class BankAccountController {
         System.out.println("Bank Account Balance: " + bankService.getBalance(accountNumber));
     }
 
-    //Check Account Information
-    /*public void getAccount(User loggedInUser) throws BankAccountDoNotExistsException {
+
+    /*
+     *
+     * Access Account Information  (findAccountNumber, checkAccountInformation, getAllAccounts)
+     *
+     */
+
+    //Find Account Number
+    public void find(User loggedInUser) throws BankAccountDoNotExistsException {
 
         System.out.print("Enter Account Number: ");
-        long accountNumber = scan.nextLong();
+        var accountNumber = scan.nextLong();
 
-        BankAccount account = bankService.getAccountInformation(accountNumber);
+        BankAccount account = bankService.findAccountNumber(accountNumber);
+
 
         if (account.getUser().getUserId() != loggedInUser.getUserId()) {
-            System.out.println("This account does not belong to the logged-in user.");
-            return;
+            throw new UnauthorizedAccountAccessException("This account does not belong to the logged-in user.");
         }
-
         System.out.println(account);
-    }*/
+        //return account;
+    }
 
-    //Check Bank Account information that is logged-in
-    public void checkAccountInformation(BankAccount bankAccount) throws BankAccountDoNotExistsException {
+    //Check the logged-in Bank Account information
+    public void getAccountLoggedInInformation(BankAccount bankAccount) throws BankAccountDoNotExistsException {
 
         long accountNumber = bankAccount.getAccountNumber();
 
+        System.out.println(bankService.findAccountNumber(accountNumber))
 
-        bankService.findAccountNumber(accountNumber);
+        ;
     }
 
-    public void getAllAccount(User loggedInUser) throws BankAccountDoNotExistsException {
+    // Fetch the all registered accounts from logged-in User
+    public void getAll(User loggedInUser) throws BankAccountDoNotExistsException {
 
         userService.getAllBankAccounts(loggedInUser).forEach(System.out::println);
-
     }
 
-    //Create Bank Account UI
-    public void createBankAccount(User loggedInUser) {
+
+    /*
+     *
+     * Essential user interfaces for Bank Main Menu (createBankAccount, loginBankAccount)
+     *
+     */
+
+    //Create a user Bank Account
+    public void register(User loggedInUser) {
         while (true) {
             try {
                 System.out.print("Create Pin: ");
@@ -135,76 +157,87 @@ public class BankAccountController {
         }
     }
 
-    public BankAccount loginBankAccount(User loggedInUser) throws InvalidPinException, BankAccountDoNotExistsException {
+    //Login user Bank Account
+    public BankAccount login(User loggedInUser) throws InvalidPinException, BankAccountDoNotExistsException {
         int attempts = 3;
 
-       while (attempts > 0) {
-           try {
-               System.out.print("Enter Account Number: ");
-               long accountNumber = scan.nextLong();
+        while (attempts > 0) {
+            try {
+                System.out.print("Enter Account Number: ");
+                long accountNumber = scan.nextLong();
 
-               System.out.print("Enter Pin: ");
-               int pin = scan.nextInt();
+                System.out.print("Enter Pin: ");
+                int pin = scan.nextInt();
 
-               BankAccount account = bankService.login(accountNumber, pin);
+                BankAccount account = bankService.findAccountNumber(accountNumber);
 
 
-               if (account.getUser().getUserId() != loggedInUser.getUserId()) {
-                   System.out.println("Account do not belong to User!");
-                   return null;
-               }
-                return account;
-           } catch (InputMismatchException e) {
-               System.out.println("Invalid input!");
-           } catch (InvalidPinException | BankAccountDoNotExistsException e) {
-               --attempts;
-               System.out.println(e.getMessage() + "Attempts: " + attempts);
-           }
-       }
+                if (account.getUser().getUserId() != loggedInUser.getUserId()) {
+                    throw new UnauthorizedAccountAccessException("This account does not belong to the logged-in user.");
+                }
+                return bankService.login(accountNumber, pin);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input!");
+                scan.next();
+            } catch (InvalidPinException e) {
+                --attempts;
+                System.out.println(e.getMessage() + "Attempts: " + attempts);
+            } catch (BankAccountDoNotExistsException e) {
+                System.out.println(e.getMessage());
+            }
+        }
 
-        System.out.println("Login failed, too many attempts!");
-        return null;
+        throw new LoginFailedException("Login failed, too many attempts!");
     }
 
 
+    /*
+     *
+     * MainMenus of Bank Account user interface (bankAccountHomeMenus, bankMenus)
+     *
+     */
+
     //Bank Menu After User Login
-    public void bankAccountHomeMenu(User loggedInUser) {
+    public void homeMenu(User loggedInUser) {
 
         while (true) {
             try {
                 System.out.println("""
                         1. Create Bank Account
                         2. Login Bank Account
-                        3. View My Accounts
-                        4. Sign Out
-                        5. Exit""");
+                        3. Search My Bank Account
+                        4. View My Accounts
+                        5. Sign Out
+                        6. Exit""");
                 System.out.print("Select: ");
                 var options = scan.nextInt();
 
                 switch (options) {
-                    case 1 -> createBankAccount(loggedInUser);
+                    case 1 -> register(loggedInUser);
                     case 2 -> {
-                        BankAccount loggedInAccount = loginBankAccount(loggedInUser);
-                        if (loggedInAccount != null) bankMenu(loggedInAccount);
+                        BankAccount loggedInAccount = login(loggedInUser);
+                        if (loggedInAccount != null) bankMenus(loggedInAccount);
                     }
-                    case 3 -> getAllAccount(loggedInUser);
-                    case 4 -> {return;}
-                    case 5 -> System.exit(0);
+                    case 3 -> find(loggedInUser);
+                    case 4 -> getAll(loggedInUser);
+                    case 5 -> {
+                        return;
+                    }
+                    case 6 -> System.exit(0);
 
                 }
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input!");
                 scan.next();
-            } catch (BankAccountDoNotExistsException e) {
+            } catch (BankAccountDoNotExistsException | UnauthorizedAccountAccessException | LoginFailedException e) {
                 System.out.println(e.getMessage());
             }
         }
     }
 
-
     // This is belonged to the bankAccountHomeMenu(User loggedInUser)
     // Bank Menu after logged in on Bank Account
-    public void bankMenu(BankAccount loggedInAccount) {
+    public void bankMenus(BankAccount loggedInAccount) {
 
         var isBankMainMenuRunning = true;
 
@@ -223,9 +256,9 @@ public class BankAccountController {
 
                 switch (options) {
                     case 1 -> getBalance(loggedInAccount);
-                    case 2 -> depositMenu(loggedInAccount);
+                    case 2 -> deposit(loggedInAccount);
                     case 3 -> withdraw(loggedInAccount);
-                    case 4 -> checkAccountInformation(loggedInAccount);
+                    case 4 -> getAccountLoggedInInformation(loggedInAccount);
                     case 5 -> isBankMainMenuRunning = false;
                     case 6 -> System.exit(0);
                     default -> System.out.println("Option is not on the selection, please try again!");

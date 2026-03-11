@@ -1,16 +1,16 @@
 
 package com.jibe.app;
 
-import com.jibe.controller.UserController;
+import com.jibe.controller.impl.UserControllerInterface;
 
 /**
  *
  * @author Win11
  */
 public class BankApplication {
-    private final UserController controller;
+    private final UserControllerInterface controller;
     
-    public BankApplication(UserController controller) {
+    public BankApplication(UserControllerInterface controller) {
         this.controller = controller;
     }
     

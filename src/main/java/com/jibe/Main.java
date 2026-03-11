@@ -3,6 +3,8 @@ package com.jibe;
 import com.jibe.app.BankApplication;
 import com.jibe.controller.BankAccountController;
 import com.jibe.controller.UserController;
+import com.jibe.controller.impl.BankAccountControllerInterface;
+import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
 
@@ -16,8 +18,8 @@ public class Main {
         BankAccountService bankService = new BankAccountService();
         UserService userService = new UserService();
 
-        BankAccountController bankController = new BankAccountController(bankService, userService,scan);
-        UserController userController = new UserController(userService, bankController, scan);
+        BankAccountControllerInterface bankController = new BankAccountController(bankService, userService,scan);
+        UserControllerInterface userController = new UserController(userService, bankController, scan);
 
         BankApplication app = new BankApplication(userController);
 

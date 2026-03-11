@@ -5,6 +5,8 @@
 package com.jibe.controller;
 
 
+import com.jibe.controller.impl.BankAccountControllerInterface;
+import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.exceptions.InvalidPasscodeException;
 import com.jibe.exceptions.LoginFailedException;
 import com.jibe.exceptions.PasscodeNotMatchException;
@@ -20,76 +22,26 @@ import java.util.Scanner;
  *
  * @author Win11
  */
-public class UserController {
+public class UserController implements UserControllerInterface {
 
     private final UserService userService;
     private final Scanner scan;
-    private final BankAccountController bankController;
+    private final BankAccountControllerInterface bankController;
 
-    public UserController(UserService service, BankAccountController bankController, Scanner scan) {
+    public UserController(UserService service, BankAccountControllerInterface bankController, Scanner scan) {
         this.userService = service;
         this.bankController = bankController;
         this.scan = scan;
     }
 
-    //Menu methods use for homeMenu
-    //Register
-    private void registerUser() {
-
-        while (true) {
-            try {
-                System.out.println("REGISTER ACCOUNT");
-
-                System.out.print("Create Passcode: ");
-                var enteredPasscode = scan.nextLine();
-
-                System.out.print("Confirm Passcode: ");
-                var passcodeConfirmation = scan.nextLine();
-
-                userService.registerUser(enteredPasscode, passcodeConfirmation);
-                System.out.println("Account Created Successfully!");
-                return;
-            } catch (PasscodeNotMatchException e) {
-                System.out.println(e.getMessage());
-
-            }
-        }
-
-
-    }
-
-    //Login
-    private User loginUser() throws UserNotFoundException {
-        var attempts = 3;
-        while (attempts > 0) {
-
-            try {
-                System.out.print("Enter User ID: ");
-                var enteredUserId = scan.nextInt();
-                scan.nextLine();
-
-                System.out.print("Enter Passcode: ");
-                var enteredPasscode = scan.nextLine();
-
-                return userService.loginUser(enteredUserId, enteredPasscode);
-            }catch (InputMismatchException e) {
-                System.out.println("Invalid input, please try again!");
-                scan.next();
-            } catch (UserNotFoundException e) {
-                System.out.println(e.getMessage());
-                //scan.next();
-            }
-            catch (InvalidPasscodeException e) {
-                --attempts;
-                System.out.println(e.getMessage() + " Attempts left: " + attempts);
-            }
-        }
-
-        throw new LoginFailedException("Login failed, too many attempts!");
-    }
+    /*
+     *
+     * Access Account Information (findUserById, getAll)
+     *
+     */
 
     //FindUserById
-    public void findUserById() {
+    public void find() {
 
         int searchAttempts = 3;
 
@@ -132,14 +84,70 @@ public class UserController {
         }
     }
 
+
     /*
+     * Essential user interfaces that includes User Main Menus (registerUser, loginUser
+     */
+
+    //Register
+    public void register() {
+
+        while (true) {
+            try {
+                System.out.println("REGISTER ACCOUNT");
+
+                System.out.print("Create Passcode: ");
+                var enteredPasscode = scan.nextLine();
+
+                System.out.print("Confirm Passcode: ");
+                var passcodeConfirmation = scan.nextLine();
+
+                userService.registerUser(enteredPasscode, passcodeConfirmation);
+                System.out.println("Account Created Successfully!");
+                return;
+            } catch (PasscodeNotMatchException e) {
+                System.out.println(e.getMessage());
+
+            }
+        }
 
 
+    }
+
+    //Login
+    public User login() throws UserNotFoundException {
+        var attempts = 3;
+        while (attempts > 0) {
+
+            try {
+                System.out.print("Enter User ID: ");
+                var enteredUserId = scan.nextInt();
+                scan.nextLine();
+
+                System.out.print("Enter Passcode: ");
+                var enteredPasscode = scan.nextLine();
+
+                return userService.loginUser(enteredUserId, enteredPasscode);
+            } catch (InputMismatchException e) {
+                System.out.println("Invalid input, please try again!");
+                scan.next();
+            } catch (UserNotFoundException e) {
+                System.out.println(e.getMessage());
+                //scan.next();
+            } catch (InvalidPasscodeException e) {
+                --attempts;
+                System.out.println(e.getMessage() + " Attempts left: " + attempts);
+            }
+        }
+
+        throw new LoginFailedException("Login failed, too many attempts!");
+    }
 
 
-
-
-
+    /*
+     *
+     * Main Menus of User (homeMenu)
+     *
      */
     //Home Menu
     public void homeMenu() {
@@ -162,21 +170,21 @@ public class UserController {
                 scan.nextLine();
 
                 switch (selectOption) {
-                    case 1 -> registerUser(); //Register Account
+                    case 1 -> register(); //Register Account
 
                     case 2 -> {
-                        User loggedinUser = loginUser();
+                        User loggedinUser = login();
 
                         if (loggedinUser != null) {
                             System.out.println("Successful Login!");
                             //BankController menus
-                            bankController.bankAccountHomeMenu(loggedinUser);
+                            bankController.homeMenu(loggedinUser);
                         }
 
                     }
                     case 3 -> homeMenuRunning = false;
 
-                    case 4 -> findUserById();
+                    case 4 -> find();
                     case 5 -> getAll();
 
                     default -> System.out.println("Option is not on the selection, please try again!");
