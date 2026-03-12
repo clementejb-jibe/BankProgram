@@ -56,7 +56,7 @@ public class UserController implements UserControllerInterface {
 
             } catch (UserNotFoundException e) {
                 System.out.println(e.getMessage());
-                scan.next();
+                //scan.next();
             } catch (InputMismatchException e) {
                 System.out.println("Invalid input, please try again!");
                 scan.next();

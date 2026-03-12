@@ -23,6 +23,6 @@ public class Main {
 
         BankApplication app = new BankApplication(userController);
 
-        app.start();
+        app.run();
     }
 }
