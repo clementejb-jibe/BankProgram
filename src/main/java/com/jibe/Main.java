@@ -20,8 +20,8 @@ public class Main {
         BankAccountService bankService = new BankAccountService();
         UserService userService = new UserService();
 
-        BankAccountControllerInterface bankController = new BankAccountController(bankService, userService,scan);
-        UserControllerInterface userController = new UserController(userService, bankController,inputHandler , scan);
+        BankAccountControllerInterface bankController = new BankAccountController(bankService, userService, inputHandler);
+        UserControllerInterface userController = new UserController(userService, bankController, inputHandler, scan);
 
         BankApplication app = new BankApplication(userController);
 

@@ -8,7 +8,9 @@ import com.jibe.model.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
 
+import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.Map;
 import java.util.Scanner;
 
 /**
@@ -18,14 +20,16 @@ import java.util.Scanner;
 public class BankAccountController implements BankAccountControllerInterface {
 
     private final BankAccountService bankService;
-    private final Scanner scan;
+
     private final UserService userService;
+    private final InputHandler inputHandler;
 
     //Constructor
-    public BankAccountController(BankAccountService service, UserService userService, Scanner scan) {
+    public BankAccountController(BankAccountService service, UserService userService,InputHandler inputHandler ) {
         this.bankService = service;
-        this.scan = scan;
         this.userService = userService;
+        this.inputHandler = inputHandler;
+
     }
 
 
@@ -42,22 +46,17 @@ public class BankAccountController implements BankAccountControllerInterface {
             try {
                 long accNumber = loggedInAccount.getAccountNumber();
 
-                System.out.print("Enter Amount: ");
-                double amount = scan.nextDouble();
+                var amount = inputHandler.readDouble("Enter Amount: ");
 
                 bankService.deposit(accNumber, amount);
 
                 System.out.print("Deposit successful! ");
                 getBalance(loggedInAccount);
-                break;
+                return;
             } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
                 System.out.println(e.getMessage());
-                scan.next();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input!");
-                scan.next();
+                //scan.next();
             }
-
         }
     }
 
@@ -67,17 +66,14 @@ public class BankAccountController implements BankAccountControllerInterface {
         long accountNumber = loggedInAccount.getAccountNumber();
         while (true) {
             try {
-                System.out.print("Enter Amount: ");
-                double withdrawAmount = scan.nextDouble();
+                var withdrawAmount = inputHandler.readDouble("Enter Amount: ");
 
                 bankService.withdraw(accountNumber, withdrawAmount);
-                break;
+                System.out.print("Withdraw successful!");
+                getBalance(loggedInAccount);
+                return;
             } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
                 System.out.println(e.getMessage());
-                //scan.next();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input!");
-                scan.next();
             }
         }
     }
@@ -99,17 +95,19 @@ public class BankAccountController implements BankAccountControllerInterface {
     //Find Account Number
     public void find(User loggedInUser) throws BankAccountDoNotExistsException {
 
-        System.out.print("Enter Account Number: ");
-        var accountNumber = scan.nextLong();
+        try {
+            var accountNumber = inputHandler.readLong("Enter Account Number: ");
 
-        BankAccount account = bankService.findAccountNumber(accountNumber);
+            BankAccount account = bankService.findAccountNumber(accountNumber);
 
 
-        if (account.getUser().getUserId() != loggedInUser.getUserId()) {
-            throw new UnauthorizedAccountAccessException("This account does not belong to the logged-in user.");
+            if (account.getUser().getUserId() != loggedInUser.getUserId()) {
+                throw new UnauthorizedAccountAccessException("This account does not belong to the logged-in user.");
+            }
+            System.out.println(account);
+        }catch (BankAccountDoNotExistsException e) {
+            System.out.println(e.getMessage());
         }
-        System.out.println(account);
-        //return account;
     }
 
     //Check the logged-in Bank Account information
@@ -117,9 +115,7 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         long accountNumber = bankAccount.getAccountNumber();
 
-        System.out.println(bankService.findAccountNumber(accountNumber))
-
-        ;
+        System.out.println(bankService.findAccountNumber(accountNumber));
     }
 
     // Fetch the all registered accounts from logged-in User
@@ -139,17 +135,13 @@ public class BankAccountController implements BankAccountControllerInterface {
     public void register(User loggedInUser) {
         while (true) {
             try {
-                System.out.print("Create Pin: ");
-                int pin = scan.nextInt();
+                int pin = inputHandler.readInt("Create Pin: ");
 
                 if (bankService.checkPin(pin)) {
                     bankService.createBankAccount(pin, loggedInUser);
                     System.out.println("Bank Account Created Successfully!");
                     break;
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input!");
-
             } catch (InvalidPinException e) {
                 System.out.println(e.getMessage());
 
@@ -163,11 +155,9 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         while (attempts > 0) {
             try {
-                System.out.print("Enter Account Number: ");
-                long accountNumber = scan.nextLong();
+                long accountNumber = inputHandler.readLong("Enter Account Number: ");
 
-                System.out.print("Enter Pin: ");
-                int pin = scan.nextInt();
+                int pin = inputHandler.readInt("Enter Pin: ");
 
                 BankAccount account = bankService.findAccountNumber(accountNumber);
 
@@ -176,9 +166,6 @@ public class BankAccountController implements BankAccountControllerInterface {
                     throw new UnauthorizedAccountAccessException("This account does not belong to the logged-in user.");
                 }
                 return bankService.login(accountNumber, pin);
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input!");
-                scan.next();
             } catch (InvalidPinException e) {
                 --attempts;
                 System.out.println(e.getMessage() + "Attempts: " + attempts);
@@ -203,14 +190,13 @@ public class BankAccountController implements BankAccountControllerInterface {
         while (true) {
             try {
                 System.out.println("""
-                        1. Create Bank Account
+                        1. Register Bank Account
                         2. Login Bank Account
                         3. Search My Bank Account
                         4. View My Accounts
                         5. Sign Out
                         6. Exit""");
-                System.out.print("Select: ");
-                var options = scan.nextInt();
+                var options = inputHandler.readInt("Select: ");
 
                 switch (options) {
                     case 1 -> register(loggedInUser);
@@ -226,9 +212,6 @@ public class BankAccountController implements BankAccountControllerInterface {
                     case 6 -> System.exit(0);
 
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input!");
-                scan.next();
             } catch (BankAccountDoNotExistsException | UnauthorizedAccountAccessException | LoginFailedException e) {
                 System.out.println(e.getMessage());
             }
@@ -250,9 +233,7 @@ public class BankAccountController implements BankAccountControllerInterface {
                         4. Check Account Information
                         5. Sign Out
                         6. Exit""");
-                System.out.print("Select: ");
-
-                int options = scan.nextInt();
+                int options = inputHandler.readInt("Select: ");
 
                 switch (options) {
                     case 1 -> getBalance(loggedInAccount);
@@ -265,9 +246,6 @@ public class BankAccountController implements BankAccountControllerInterface {
 
                 }
 
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please try again!");
-                scan.next();
             } catch (BankAccountDoNotExistsException e) {
                 throw new RuntimeException(e);
             }
