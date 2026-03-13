@@ -7,14 +7,11 @@ package com.jibe.controller;
 
 import com.jibe.controller.impl.BankAccountControllerInterface;
 import com.jibe.controller.impl.UserControllerInterface;
-import com.jibe.exceptions.InvalidPasscodeException;
-import com.jibe.exceptions.LoginFailedException;
-import com.jibe.exceptions.PasscodeNotMatchException;
-import com.jibe.exceptions.UserNotFoundException;
+import com.jibe.exceptions.*;
 import com.jibe.model.User;
 import com.jibe.service.UserService;
 
-import java.util.InputMismatchException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
@@ -27,11 +24,23 @@ public class UserController implements UserControllerInterface {
     private final UserService userService;
     private final Scanner scan;
     private final BankAccountControllerInterface bankController;
+    private final InputHandler inputHandler;
+    final private Map<Integer, Runnable> menus = new HashMap<>();
 
-    public UserController(UserService service, BankAccountControllerInterface bankController, Scanner scan) {
+    public UserController(UserService service, BankAccountControllerInterface bankController,
+                          InputHandler inputHandle, Scanner scan) {
         this.userService = service;
         this.bankController = bankController;
+        this.inputHandler = inputHandle;
         this.scan = scan;
+    }
+
+    // List of Options in Main Menu
+    private void commandList() {
+        menus.put(1, this::register);
+        menus.put(2, this::handleLogin);
+        menus.put(3, this::find);
+        menus.put(4, this::getAll);
     }
 
     /*
@@ -48,26 +57,20 @@ public class UserController implements UserControllerInterface {
         while (searchAttempts > 0) {
 
             try {
-                System.out.print("Enter User Id: ");
-                var searchId = scan.nextLong();
+                var searchId = inputHandler.readLong("Enter User Id: ");
 
                 System.out.println(userService.findUserById(searchId));
                 return;
 
             } catch (UserNotFoundException e) {
                 System.out.println(e.getMessage());
-                //scan.next();
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please try again!");
-                scan.next();
             }
 
             searchAttempts--;
             System.out.println("Attempts left: " + searchAttempts);
-            //scan.next();
 
             if (searchAttempts == 0) {
-                System.out.println("No attempts left!");
+                throw new SearchIdFailedExeption("No attempts left.");
             }
         }
 
@@ -78,7 +81,7 @@ public class UserController implements UserControllerInterface {
         Map<Long, User> registeredUsers = userService.getAll();
 
         if (registeredUsers.isEmpty()) {
-            System.out.println("No Registered User!");
+            throw new NoRegisteredUserException("No registered users.");
         } else {
             registeredUsers.forEach((_, user) -> System.out.println(user));
         }
@@ -95,12 +98,8 @@ public class UserController implements UserControllerInterface {
         while (true) {
             try {
                 System.out.println("REGISTER ACCOUNT");
-
-                System.out.print("Create Passcode: ");
-                var enteredPasscode = scan.nextLine();
-
-                System.out.print("Confirm Passcode: ");
-                var passcodeConfirmation = scan.nextLine();
+                var enteredPasscode = inputHandler.readString("Create Passcode: ");
+                var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
                 userService.registerUser(enteredPasscode, passcodeConfirmation);
                 System.out.println("Account Created Successfully!");
@@ -114,26 +113,37 @@ public class UserController implements UserControllerInterface {
 
     }
 
+    //Handle Login
+    public void handleLogin()  {
+        try {
+            User loggedInUser = login();
+
+            if (loggedInUser != null) {
+                System.out.println("Log-in Successful.");
+                //BankAccount Menus
+                bankController.homeMenu(loggedInUser);
+            }
+        } catch (UserNotFoundException e) {
+            System.out.println(e.getMessage());
+        }
+
+    }
+
     //Login
     public User login() throws UserNotFoundException {
         var attempts = 3;
+
         while (attempts > 0) {
 
             try {
-                System.out.print("Enter User ID: ");
-                var enteredUserId = scan.nextInt();
+                var enteredUserId = inputHandler.readLong("Enter User ID: ");
                 scan.nextLine();
 
-                System.out.print("Enter Passcode: ");
-                var enteredPasscode = scan.nextLine();
+                var enteredPasscode = inputHandler.readString("Enter Passcode: ");
 
                 return userService.loginUser(enteredUserId, enteredPasscode);
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please try again!");
-                scan.next();
             } catch (UserNotFoundException e) {
                 System.out.println(e.getMessage());
-                //scan.next();
             } catch (InvalidPasscodeException e) {
                 --attempts;
                 System.out.println(e.getMessage() + " Attempts left: " + attempts);
@@ -152,48 +162,38 @@ public class UserController implements UserControllerInterface {
     //Home Menu
     public void homeMenu() {
 
-        var homeMenuRunning = true;
+        commandList();
 
-        while (homeMenuRunning) {
+        var running = true;
+
+        while (running) {
             try {
                 System.out.println("""
                         HOME MENU
                         1. Register Account
                         2. Login
-                        3. Exit
-                        4. Find Account
-                        5. Check Account (For Debugging)""");
-                System.out.print("Select: ");
-
-                var selectOption = scan.nextInt();
-
+                        3. Find Account
+                        4. Get All Account (For Debugging)
+                        5. Exit""");
+                var selectOption = inputHandler.readInt("Select Account: ");
                 scan.nextLine();
 
-                switch (selectOption) {
-                    case 1 -> register(); //Register Account
+                Runnable commands = menus.get(selectOption);
 
-                    case 2 -> {
-                        User loggedinUser = login();
-
-                        if (loggedinUser != null) {
-                            System.out.println("Successful Login!");
-                            //BankController menus
-                            bankController.homeMenu(loggedinUser);
-                        }
-
-                    }
-                    case 3 -> homeMenuRunning = false;
-
-                    case 4 -> find();
-                    case 5 -> getAll();
-
-                    default -> System.out.println("Option is not on the selection, please try again!");
-
+                if (selectOption == 5) {
+                    running = false;
+                    continue;
                 }
-            } catch (InputMismatchException e) {
-                System.out.println("Invalid input, please try again!");
-                scan.next();
-            } catch (UserNotFoundException e) {
+
+                if (commands != null) {
+                    commands.run();
+                } else {
+                    throw new IllegalArgumentException("Option is not on the list!");
+                }
+
+
+
+            } catch (IllegalArgumentException e) {
                 System.out.println(e.getMessage());
             }
         }
