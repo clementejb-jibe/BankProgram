@@ -1,7 +1,8 @@
 package com.jibe.ui;
 
-public class BankAccountInterface {
-    public static void bankAccountInterface() {
+public class BankAccountInterface implements UI {
+    @Override
+    public void showMenu() {
         System.out.println("""
                 +-------------------------------+
                 |          BANK ACCOUNT         |

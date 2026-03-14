@@ -1,7 +1,7 @@
 package com.jibe.ui;
 
-public class UserInterface {
-    public static void userHomeInterface() {
+public class UserInterface implements UI{
+    public void showMenu() {
         System.out.println("""
                 +-------------------------------+
                 |          BANK SYSTEM          |
@@ -13,21 +13,21 @@ public class UserInterface {
                 | 5. Exit                       |""");
     }
 
-    public static void registerUserInterface() {
+    public void registerUserInterface() {
         System.out.println("""
                 +-------------------------------+
                 |        REGISTER ACCOUNT       |
                 +-------------------------------+""");
     }
 
-    public static void loginUserInterface() {
+    public void loginUserInterface() {
         System.out.println("""
                 +-------------------------------+
                 |         LOGIN ACCOUNT         |
                 +-------------------------------+""");
     }
 
-    public static void findUserInterface() {
+    public void findUserInterface() {
         System.out.println("""
                 +-------------------------------+
                 |          FIND ACCOUNT         |

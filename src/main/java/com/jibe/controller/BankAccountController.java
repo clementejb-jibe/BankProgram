@@ -7,7 +7,7 @@ import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
-import com.jibe.ui.BankAccountInterface;
+import com.jibe.ui.UI;
 
 
 /**
@@ -19,13 +19,13 @@ public class BankAccountController implements BankAccountControllerInterface {
     private final BankAccountService bankService;
     private final UserService userService;
     private final InputHandler inputHandler;
-
+    private final UI bankInterface;
     //Constructor
-    public BankAccountController(BankAccountService service, UserService userService, InputHandler inputHandler) {
+    public BankAccountController(BankAccountService service, UserService userService, InputHandler inputHandler, UI bankInterface) {
         this.bankService = service;
         this.userService = userService;
         this.inputHandler = inputHandler;
-
+        this.bankInterface = bankInterface;
     }
 
 
@@ -186,7 +186,8 @@ public class BankAccountController implements BankAccountControllerInterface {
         while (true) {
             try {
 
-                BankAccountInterface.bankAccountInterface();
+                bankInterface.showMenu();
+
                 var options = inputHandler.readInt("  Select Option: ");
 
                 switch (options) {
