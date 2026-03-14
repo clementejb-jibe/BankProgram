@@ -5,6 +5,7 @@
 package com.jibe.controller;
 
 
+import com.jibe.UserInterface;
 import com.jibe.controller.impl.BankAccountControllerInterface;
 import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.exceptions.*;
@@ -168,14 +169,15 @@ public class UserController implements UserControllerInterface {
 
         while (running) {
             try {
-                System.out.println("""
-                        HOME MENU
-                        1. Register Account
-                        2. Login
-                        3. Find Account
-                        4. Get All Account (For Debugging)
-                        5. Exit""");
-                var selectOption = inputHandler.readInt("Select Account: ");
+//                System.out.println("""
+//                        HOME MENU
+//                        1. Register Account
+//                        2. Login
+//                        3. Find Account
+//                        4. Get All Account (For Debugging)
+//                        5. Exit""");
+                UserInterface.userHomeMenu();
+                var selectOption = inputHandler.readInt("Select Option: ");
                 scan.nextLine();
 
                 Runnable commands = menus.get(selectOption);
