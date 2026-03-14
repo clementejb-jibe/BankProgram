@@ -28,7 +28,7 @@ public class UserService {
 
 
     //Registration
-    public void registerUser(String passcode, String passcodeConfirmation) throws PasscodeNotMatchException {
+    public User registerUser(String passcode, String passcodeConfirmation) throws PasscodeNotMatchException {
 
         if (!passcode.equals(passcodeConfirmation)) throw new PasscodeNotMatchException("Passcode not match!");
 
@@ -38,7 +38,7 @@ public class UserService {
         users.save(autoSetId, newUser);
 
         autoSetId++;
-
+        return newUser;
     }
 
     //Login

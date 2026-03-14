@@ -5,7 +5,7 @@
 package com.jibe.controller;
 
 
-import com.jibe.UserInterface;
+import com.jibe.ui.UserInterface;
 import com.jibe.controller.impl.BankAccountControllerInterface;
 import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.exceptions.*;
@@ -58,6 +58,8 @@ public class UserController implements UserControllerInterface {
         while (searchAttempts > 0) {
 
             try {
+                UserInterface.findUserInterface();
+
                 var searchId = inputHandler.readLong("Enter User Id: ");
 
                 System.out.println(userService.findUserById(searchId));
@@ -98,7 +100,7 @@ public class UserController implements UserControllerInterface {
 
         while (true) {
             try {
-                System.out.println("REGISTER ACCOUNT");
+                UserInterface.registerUserInterface();
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
@@ -114,7 +116,7 @@ public class UserController implements UserControllerInterface {
 
     }
 
-    //Handle Login
+    //Handle Login for command patter
     public void handleLogin()  {
         try {
             User loggedInUser = login();
@@ -137,6 +139,8 @@ public class UserController implements UserControllerInterface {
         while (attempts > 0) {
 
             try {
+                UserInterface.loginUserInterface();
+
                 var enteredUserId = inputHandler.readLong("Enter User ID: ");
                 scan.nextLine();
 
@@ -169,15 +173,8 @@ public class UserController implements UserControllerInterface {
 
         while (running) {
             try {
-//                System.out.println("""
-//                        HOME MENU
-//                        1. Register Account
-//                        2. Login
-//                        3. Find Account
-//                        4. Get All Account (For Debugging)
-//                        5. Exit""");
-                UserInterface.userHomeMenu();
-                var selectOption = inputHandler.readInt("Select Option: ");
+                UserInterface.userHomeInterface();
+                var selectOption = inputHandler.readInt("  Select Option: ");
                 scan.nextLine();
 
                 Runnable commands = menus.get(selectOption);
@@ -195,7 +192,7 @@ public class UserController implements UserControllerInterface {
 
 
 
-            } catch (IllegalArgumentException e) {
+            } catch (IllegalArgumentException | NoRegisteredUserException e) {
                 System.out.println(e.getMessage());
             }
         }

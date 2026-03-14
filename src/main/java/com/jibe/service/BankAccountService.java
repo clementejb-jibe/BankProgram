@@ -38,6 +38,8 @@ public class BankAccountService {
         bankRepo.save(newAccount.getAccountNumber(), newAccount);
         user.addBankAccount(newAccount);
         autoSetAccountNum++;
+
+        return newAccount;
     }
 
     public double getBalance(long accountNumber) {

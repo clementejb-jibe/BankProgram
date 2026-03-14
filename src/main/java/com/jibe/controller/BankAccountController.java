@@ -7,6 +7,7 @@ import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
+import com.jibe.ui.BankAccountInterface;
 
 
 /**
@@ -16,12 +17,11 @@ import com.jibe.service.UserService;
 public class BankAccountController implements BankAccountControllerInterface {
 
     private final BankAccountService bankService;
-
     private final UserService userService;
     private final InputHandler inputHandler;
 
     //Constructor
-    public BankAccountController(BankAccountService service, UserService userService,InputHandler inputHandler ) {
+    public BankAccountController(BankAccountService service, UserService userService, InputHandler inputHandler) {
         this.bankService = service;
         this.userService = userService;
         this.inputHandler = inputHandler;
@@ -101,7 +101,7 @@ public class BankAccountController implements BankAccountControllerInterface {
                 throw new UnauthorizedAccountAccessException("This account does not belong to the logged-in user.");
             }
             System.out.println(account);
-        }catch (BankAccountDoNotExistsException e) {
+        } catch (BankAccountDoNotExistsException e) {
             System.out.println(e.getMessage());
         }
     }
@@ -185,14 +185,9 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         while (true) {
             try {
-                System.out.println("""
-                        1. Register Bank Account
-                        2. Login Bank Account
-                        3. Search My Bank Account
-                        4. View My Accounts
-                        5. Sign Out
-                        6. Exit""");
-                var options = inputHandler.readInt("Select: ");
+
+                BankAccountInterface.bankAccountInterface();
+                var options = inputHandler.readInt("  Select Option: ");
 
                 switch (options) {
                     case 1 -> register(loggedInUser);
