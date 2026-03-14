@@ -31,7 +31,7 @@ public class BankAccountService {
         return bankRepo.findAccountNumber(accountNumber);
     }
 
-    public void createBankAccount(int pin, User user) {
+    public BankAccount createBankAccount(int pin, User user) {
 
         BankAccount newAccount = new BankAccount(autoSetAccountNum, pin, user);
 

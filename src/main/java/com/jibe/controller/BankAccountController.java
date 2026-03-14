@@ -134,8 +134,8 @@ public class BankAccountController implements BankAccountControllerInterface {
                 int pin = inputHandler.readInt("Create Pin: ");
 
                 if (bankService.checkPin(pin)) {
-                    bankService.createBankAccount(pin, loggedInUser);
-                    System.out.println("Bank Account Created Successfully!");
+                    BankAccount newAccount = bankService.createBankAccount(pin, loggedInUser);
+                    System.out.println("Bank account created successfully. Your Bank account number is: " + newAccount.getAccountNumber());
                     break;
                 }
             } catch (InvalidPinException e) {

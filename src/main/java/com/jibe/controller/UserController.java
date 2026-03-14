@@ -102,8 +102,8 @@ public class UserController implements UserControllerInterface {
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
-                userService.registerUser(enteredPasscode, passcodeConfirmation);
-                System.out.println("Account Created Successfully!");
+                User newUser = userService.registerUser(enteredPasscode, passcodeConfirmation);
+                System.out.println("Account created successfully. Your user id is: " + newUser.getUserId());
                 return;
             } catch (PasscodeNotMatchException e) {
                 System.out.println(e.getMessage());
