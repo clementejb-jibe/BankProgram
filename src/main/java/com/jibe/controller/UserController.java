@@ -5,7 +5,7 @@
 package com.jibe.controller;
 
 
-import com.jibe.ui.UI;
+import com.jibe.ui.MenuUserInterface;
 import com.jibe.ui.UserInterface;
 import com.jibe.controller.impl.BankAccountControllerInterface;
 import com.jibe.controller.impl.UserControllerInterface;
@@ -28,11 +28,11 @@ public class UserController implements UserControllerInterface {
     private final BankAccountControllerInterface bankController;
     private final InputHandler inputHandler;
     private final Map<Integer, Runnable> menus = new HashMap<>();
-    private final UI userMenuInterface;
+    private final MenuUserInterface userMenuInterface;
 
 
     public UserController(UserService service, BankAccountControllerInterface bankController,
-                          InputHandler inputHandle, Scanner scan,  UI userMenuInterface) {
+                          InputHandler inputHandle, Scanner scan,  MenuUserInterface userMenuInterface) {
         this.userService = service;
         this.bankController = bankController;
         this.inputHandler = inputHandle;
@@ -62,7 +62,7 @@ public class UserController implements UserControllerInterface {
         while (searchAttempts > 0) {
 
             try {
-                ((UserInterface) userMenuInterface).findUserInterface();
+                ((UserInterface) userMenuInterface).showFindAccountInterface();
 
                 var searchId = inputHandler.readLong("Enter User Id: ");
 
@@ -104,7 +104,7 @@ public class UserController implements UserControllerInterface {
 
         while (true) {
             try {
-                ((UserInterface) userMenuInterface).registerUserInterface();
+                ((UserInterface) userMenuInterface).showRegisterInterface();
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
@@ -143,7 +143,7 @@ public class UserController implements UserControllerInterface {
         while (attempts > 0) {
 
             try {
-                ((UserInterface) userMenuInterface).loginUserInterface();
+                ((UserInterface) userMenuInterface).showLoginInterface();
 
                 var enteredUserId = inputHandler.readLong("Enter User ID: ");
                 scan.nextLine();

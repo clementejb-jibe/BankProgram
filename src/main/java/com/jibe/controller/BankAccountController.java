@@ -7,7 +7,8 @@ import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
-import com.jibe.ui.UI;
+import com.jibe.ui.BankAccountInterface;
+import com.jibe.ui.MenuUserInterface;
 
 
 /**
@@ -19,9 +20,9 @@ public class BankAccountController implements BankAccountControllerInterface {
     private final BankAccountService bankService;
     private final UserService userService;
     private final InputHandler inputHandler;
-    private final UI bankInterface;
+    private final MenuUserInterface bankInterface;
     //Constructor
-    public BankAccountController(BankAccountService service, UserService userService, InputHandler inputHandler, UI bankInterface) {
+    public BankAccountController(BankAccountService service, UserService userService, InputHandler inputHandler, MenuUserInterface bankInterface) {
         this.bankService = service;
         this.userService = userService;
         this.inputHandler = inputHandler;
@@ -42,12 +43,13 @@ public class BankAccountController implements BankAccountControllerInterface {
             try {
                 long accNumber = loggedInAccount.getAccountNumber();
 
+                ((BankAccountInterface) bankInterface).showDepositInterface();
+
                 var amount = inputHandler.readDouble("Enter Amount: ");
 
                 bankService.deposit(accNumber, amount);
 
-                System.out.print("Deposit successful! ");
-                getBalance(loggedInAccount);
+                System.out.println("Deposit successful! New Balance: " + bankService.getBalance(accNumber));
                 return;
             } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
                 System.out.println(e.getMessage());
@@ -59,14 +61,17 @@ public class BankAccountController implements BankAccountControllerInterface {
     //Withdraw
     public void withdraw(BankAccount loggedInAccount) {
 
-        long accountNumber = loggedInAccount.getAccountNumber();
+
         while (true) {
             try {
+                long accountNumber = loggedInAccount.getAccountNumber();
+
+                ((BankAccountInterface) bankInterface).showWithdrawInterface();
+
                 var withdrawAmount = inputHandler.readDouble("Enter Amount: ");
 
                 bankService.withdraw(accountNumber, withdrawAmount);
-                System.out.print("Withdraw successful!");
-                getBalance(loggedInAccount);
+                System.out.println("Withdraw successful! New Balance: " + bankService.getBalance(accountNumber));
                 return;
             } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
                 System.out.println(e.getMessage());
@@ -77,6 +82,8 @@ public class BankAccountController implements BankAccountControllerInterface {
     //Get Balance
     public void getBalance(BankAccount loggedInAccount) {
         long accountNumber = loggedInAccount.getAccountNumber();
+
+        ((BankAccountInterface) bankInterface).showGetBalanceInterface();
 
         System.out.println("Bank Account Balance: " + bankService.getBalance(accountNumber));
     }
@@ -93,6 +100,8 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         try {
             var accountNumber = inputHandler.readLong("Enter Account Number: ");
+
+            bankInterface.showFindAccountInterface();
 
             BankAccount account = bankService.findAccountNumber(accountNumber);
 
@@ -111,12 +120,14 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         long accountNumber = bankAccount.getAccountNumber();
 
+        ((BankAccountInterface) bankInterface).showLoggedInAccountInterface();
+
         System.out.println(bankService.findAccountNumber(accountNumber));
     }
 
     // Fetch the all registered accounts from logged-in User
     public void getAll(User loggedInUser) throws BankAccountDoNotExistsException {
-
+        bankInterface.showGetAllAccountsInterface();
         userService.getAllBankAccounts(loggedInUser).forEach(System.out::println);
     }
 
@@ -131,6 +142,9 @@ public class BankAccountController implements BankAccountControllerInterface {
     public void register(User loggedInUser) {
         while (true) {
             try {
+
+                bankInterface.showRegisterInterface();
+
                 int pin = inputHandler.readInt("Create Pin: ");
 
                 if (bankService.checkPin(pin)) {
@@ -151,6 +165,9 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         while (attempts > 0) {
             try {
+
+                bankInterface.showLoginInterface();
+
                 long accountNumber = inputHandler.readLong("Enter Account Number: ");
 
                 int pin = inputHandler.readInt("Enter Pin: ");

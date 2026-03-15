@@ -1,6 +1,6 @@
 package com.jibe.ui;
 
-public class UserInterface implements UI{
+public class UserInterface implements MenuUserInterface {
     public void showMenu() {
         System.out.println("""
                 +-------------------------------+
@@ -13,25 +13,29 @@ public class UserInterface implements UI{
                 | 5. Exit                       |""");
     }
 
-    public void registerUserInterface() {
+    public void showRegisterInterface() {
         System.out.println("""
                 +-------------------------------+
                 |        REGISTER ACCOUNT       |
                 +-------------------------------+""");
     }
 
-    public void loginUserInterface() {
+    public void showLoginInterface() {
         System.out.println("""
                 +-------------------------------+
                 |         LOGIN ACCOUNT         |
                 +-------------------------------+""");
     }
 
-    public void findUserInterface() {
+    public void showFindAccountInterface() {
         System.out.println("""
                 +-------------------------------+
                 |          FIND ACCOUNT         |
                 +-------------------------------+""");
+    }
+
+    public void showGetAllAccountsInterface() {
+
     }
 
 }
