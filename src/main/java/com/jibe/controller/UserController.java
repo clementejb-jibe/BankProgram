@@ -6,7 +6,6 @@ package com.jibe.controller;
 
 
 import com.jibe.ui.MenuUserInterface;
-import com.jibe.ui.UserInterface;
 import com.jibe.controller.impl.BankAccountControllerInterface;
 import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.exceptions.*;
@@ -62,7 +61,7 @@ public class UserController implements UserControllerInterface {
         while (searchAttempts > 0) {
 
             try {
-                ((UserInterface) userMenuInterface).showFindAccountInterface();
+                 userMenuInterface.showFindAccountInterface();
 
                 var searchId = inputHandler.readLong("Enter User Id: ");
 
@@ -104,7 +103,7 @@ public class UserController implements UserControllerInterface {
 
         while (true) {
             try {
-                ((UserInterface) userMenuInterface).showRegisterInterface();
+                 userMenuInterface.showRegisterInterface();
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
@@ -143,7 +142,7 @@ public class UserController implements UserControllerInterface {
         while (attempts > 0) {
 
             try {
-                ((UserInterface) userMenuInterface).showLoginInterface();
+                userMenuInterface.showLoginInterface();
 
                 var enteredUserId = inputHandler.readLong("Enter User ID: ");
                 scan.nextLine();

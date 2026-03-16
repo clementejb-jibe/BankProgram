@@ -15,6 +15,19 @@ public class BankAccountInterface implements MenuUserInterface {
                 | 6. Exit                       |""");
     }
 
+    public void showBankMenu() {
+        System.out.println("""
+                +-------------------------------+
+                |              BANK             |
+                +-------------------------------+
+                | 1. Check Balance              |
+                | 2. Deposit                    |
+                | 3. Withdraw                   |
+                | 4. Account Information        |
+                | 5. Sign out                   |
+                | 6. Exit                       |""");
+    }
+
     @Override
     public void showRegisterInterface() {
         System.out.println("""

@@ -235,13 +235,9 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         while (isBankMainMenuRunning) {
             try {
-                System.out.println("""
-                        1. Check Balance
-                        2. Deposit
-                        3. Withdraw
-                        4. Check Account Information
-                        5. Sign Out
-                        6. Exit""");
+
+                ((BankAccountInterface) bankInterface).showBankMenu();
+
                 int options = inputHandler.readInt("Select: ");
 
                 switch (options) {
