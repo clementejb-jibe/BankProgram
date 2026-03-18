@@ -41,7 +41,7 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         while (true) {
             try {
-                long accNumber = loggedInAccount.getAccountNumber();
+                var accNumber = loggedInAccount.getAccountNumber();
 
                 ((BankAccountInterface) bankInterface).showDepositInterface();
 
@@ -64,7 +64,7 @@ public class BankAccountController implements BankAccountControllerInterface {
 
         while (true) {
             try {
-                long accountNumber = loggedInAccount.getAccountNumber();
+                var accountNumber = loggedInAccount.getAccountNumber();
 
                 ((BankAccountInterface) bankInterface).showWithdrawInterface();
 
@@ -80,8 +80,8 @@ public class BankAccountController implements BankAccountControllerInterface {
     }
 
     //Get Balance
-    public void getBalance(BankAccount loggedInAccount) {
-        long accountNumber = loggedInAccount.getAccountNumber();
+    public void getBalance(BankAccount loggedInAccount) throws BankAccountDoNotExistsException {
+        var accountNumber = loggedInAccount.getAccountNumber();
 
         ((BankAccountInterface) bankInterface).showGetBalanceInterface();
 
@@ -103,7 +103,7 @@ public class BankAccountController implements BankAccountControllerInterface {
 
             bankInterface.showFindAccountInterface();
 
-            BankAccount account = bankService.findAccountNumber(accountNumber);
+            var account = bankService.findAccountNumber(accountNumber);
 
 
             if (account.getUser().getUserId() != loggedInUser.getUserId()) {
@@ -118,7 +118,7 @@ public class BankAccountController implements BankAccountControllerInterface {
     //Check the logged-in Bank Account information
     public void getAccountLoggedInInformation(BankAccount bankAccount) throws BankAccountDoNotExistsException {
 
-        long accountNumber = bankAccount.getAccountNumber();
+        var accountNumber = bankAccount.getAccountNumber();
 
         ((BankAccountInterface) bankInterface).showLoggedInAccountInterface();
 
@@ -145,10 +145,10 @@ public class BankAccountController implements BankAccountControllerInterface {
 
                 bankInterface.showRegisterInterface();
 
-                int pin = inputHandler.readInt("Create Pin: ");
+                var pin = inputHandler.readInt("Create Pin: ");
 
                 if (bankService.checkPin(pin)) {
-                    BankAccount newAccount = bankService.createBankAccount(pin, loggedInUser);
+                    var newAccount = bankService.createBankAccount(pin, loggedInUser);
                     System.out.println("Bank account created successfully. Your Bank account number is: " + newAccount.getAccountNumber());
                     return;
                 }
@@ -219,7 +219,7 @@ public class BankAccountController implements BankAccountControllerInterface {
                         return;
                     }
                     case 6 -> System.exit(0);
-
+                    default -> System.out.println("Option is not on the list.");
                 }
             } catch (BankAccountDoNotExistsException | UnauthorizedAccountAccessException | LoginFailedException e) {
                 System.out.println(e.getMessage());

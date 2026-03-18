@@ -15,7 +15,7 @@ import com.jibe.repository.BankAccountRepository;
 public class BankAccountService {
 
     private final BankAccountRepository bankRepo;
-    private long autoSetAccountNum = 10001; //Next Task is to add feature that one user can hold many accounts.
+    private long autoSetAccountNum = 10001;
 
 
     public BankAccountService() {
@@ -23,17 +23,12 @@ public class BankAccountService {
     }
 
     public BankAccount findAccountNumber(long accountNumber) throws BankAccountDoNotExistsException {
-
-        if (bankRepo.findAccountNumber(accountNumber) == null) {
-            throw new BankAccountDoNotExistsException("Account do not exists!");
-        }
-
-        return bankRepo.findAccountNumber(accountNumber);
+        return bankRepo.findAccountNumber(accountNumber).orElseThrow(() -> new BankAccountDoNotExistsException("Bank account do not exists."));
     }
 
     public BankAccount createBankAccount(int pin, User user) {
 
-        BankAccount newAccount = new BankAccount(autoSetAccountNum, pin, user);
+        var newAccount = new BankAccount(autoSetAccountNum, pin, user);
 
         bankRepo.save(newAccount.getAccountNumber(), newAccount);
         user.addBankAccount(newAccount);
@@ -42,9 +37,9 @@ public class BankAccountService {
         return newAccount;
     }
 
-    public double getBalance(long accountNumber) {
+    public double getBalance(long accountNumber) throws BankAccountDoNotExistsException {
 
-        var account = bankRepo.findAccountNumber(accountNumber);
+        var account = findAccountNumber(accountNumber);
 
         return account.getBalance();
     }
@@ -55,7 +50,7 @@ public class BankAccountService {
             throw new InvalidAmountException("Amount must not be negative");
         }
 
-        BankAccount account = findAccountNumber(accountNumber);
+        var account = findAccountNumber(accountNumber);
 
         account.deposit(amount);
     }
@@ -69,7 +64,7 @@ public class BankAccountService {
             throw new InvalidAmountException("Insufficient funds!");
         }
 
-        BankAccount account = findAccountNumber(accountNumber);
+        var account = findAccountNumber(accountNumber);
 
 
         account.withdraw(amount);
@@ -90,7 +85,7 @@ public class BankAccountService {
 
     //Login
     public BankAccount login(long accountNumber, int pin) throws InvalidPinException, BankAccountDoNotExistsException {
-        BankAccount accNum = findAccountNumber(accountNumber);
+        var accNum = findAccountNumber(accountNumber);
 
         if (accNum != null &&  accNum.getPin() == pin) {
             return accNum;
