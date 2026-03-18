@@ -9,6 +9,7 @@ import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.repository.UserRepository;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,7 +34,7 @@ public class UserService {
         if (!passcode.equals(passcodeConfirmation)) throw new PasscodeNotMatchException("Passcode not match!");
 
 
-        User newUser = new User(autoSetId, passcode);
+        var newUser = new User(autoSetId, passcode);
 
         users.save(autoSetId, newUser);
 
@@ -43,7 +44,7 @@ public class UserService {
 
     //Login
     public User loginUser(long userId, String passcode) throws InvalidPasscodeException, UserNotFoundException {
-        User user = findUserById(userId);
+        var user = findUserById(userId);
 
         if (user == null)
             throw new UserNotFoundException("User not found!");
@@ -64,7 +65,10 @@ public class UserService {
     }
 
     public Map<Long, User> getAll() {
-        return users.getAll();
+
+
+
+        return new HashMap<>(users.getAll());
     }
 
 
