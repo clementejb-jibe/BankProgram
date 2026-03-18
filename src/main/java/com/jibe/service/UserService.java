@@ -10,6 +10,7 @@ import com.jibe.model.User;
 import com.jibe.repository.UserRepository;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -46,9 +47,6 @@ public class UserService {
     public User loginUser(long userId, String passcode) throws InvalidPasscodeException, UserNotFoundException {
         var user = findUserById(userId);
 
-        if (user == null)
-            throw new UserNotFoundException("User not found!");
-
         if (user.getPasscode().equals(passcode))
             return user;
         else
@@ -61,23 +59,18 @@ public class UserService {
         if (user.getBankAccounts().isEmpty())
             throw new BankAccountDoNotExistsException("No registered bank accounts found!");
 
-        return user.getBankAccounts();
+        return new LinkedList<>(user.getBankAccounts());
     }
 
     public Map<Long, User> getAll() {
-
-
-
         return new HashMap<>(users.getAll());
     }
 
 
     public User findUserById(long id) throws UserNotFoundException {
 
-        return users.findUserById(id)
-                .orElseThrow(() ->
-                        new UserNotFoundException("User not found!")
-                );
+         return users.findUserById(id)
+                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
     }
 
 }
