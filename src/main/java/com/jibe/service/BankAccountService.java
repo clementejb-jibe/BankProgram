@@ -43,7 +43,10 @@ public class BankAccountService {
     }
 
     public double getBalance(long accountNumber) {
-        return bankRepo.getBalance(accountNumber);
+
+        var account = bankRepo.findAccountNumber(accountNumber);
+
+        return account.getBalance();
     }
 
     public void deposit(long accountNumber, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {

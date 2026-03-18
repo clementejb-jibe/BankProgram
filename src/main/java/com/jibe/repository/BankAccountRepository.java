@@ -21,12 +21,12 @@ public class BankAccountRepository {
         accounts.put(accountNumber, acc);
     }
    
-    public double getBalance(long accountNumber) {
+    /*public double getBalance(long accountNumber) {
         
         BankAccount account = findAccountNumber(accountNumber);
         
         return account.getBalance();
-    }
+    }*/
     
     public BankAccount findAccountNumber(long accountNumber){
         return accounts.get(accountNumber);
