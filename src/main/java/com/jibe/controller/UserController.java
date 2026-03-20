@@ -84,7 +84,7 @@ public class UserController implements UserControllerInterface {
 
     public void getAll() {
 
-        Map<Long, User> registeredUsers = userService.getAll();
+        var registeredUsers = userService.getAll();
 
         if (registeredUsers.isEmpty()) {
             throw new NoRegisteredUserException("No registered users.");
@@ -107,7 +107,7 @@ public class UserController implements UserControllerInterface {
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
-                User newUser = userService.registerUser(enteredPasscode, passcodeConfirmation);
+                var newUser = userService.registerUser(enteredPasscode, passcodeConfirmation);
                 System.out.println("Account created successfully. Your user id is: " + newUser.getUserId());
                 return;
             } catch (PasscodeNotMatchException e) {
@@ -122,7 +122,7 @@ public class UserController implements UserControllerInterface {
     //Handle Login for command patter
     public void handleLogin()  {
         try {
-            User loggedInUser = login();
+            var loggedInUser = login();
 
             if (loggedInUser != null) {
                 System.out.println("Log-in Successful.");
@@ -182,7 +182,7 @@ public class UserController implements UserControllerInterface {
                 var selectOption = inputHandler.readInt("  Select Option: ");
                 scan.nextLine();
 
-                Runnable commands = menus.get(selectOption);
+                var commands = menus.get(selectOption);
 
                 if (selectOption == 5) {
                     running = false;

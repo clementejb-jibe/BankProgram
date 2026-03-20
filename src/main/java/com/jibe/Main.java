@@ -18,22 +18,22 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
 
-        // Clear console using ANSI escape code
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
 
-        Scanner scan = new Scanner(System.in);
-        InputHandler inputHandler = new InputHandler(scan);
+        var scan = new Scanner(System.in);
+        var inputHandler = new InputHandler(scan);
 
-        BankAccountService bankService = new BankAccountService();
-        UserService userService = new UserService();
+        var bankService = new BankAccountService();
+        var userService = new UserService();
 
+        //UI
         MenuUserInterface bankInterface = new BankAccountInterface();
         MenuUserInterface userMenuInterface = new UserInterface();
+
+        //Controllers
         BankAccountControllerInterface bankController = new BankAccountController(bankService, userService, inputHandler, bankInterface);
         UserControllerInterface userController = new UserController(userService, bankController, inputHandler, scan, userMenuInterface);
 
-        BankApplication app = new BankApplication(userController);
+        var app = new BankApplication(userController);
 
         app.run();
     }

@@ -9,10 +9,7 @@ import com.jibe.model.BankAccount;
 import com.jibe.model.User;
 import com.jibe.repository.UserRepository;
 
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  *
@@ -62,15 +59,19 @@ public class UserService {
         return new LinkedList<>(user.getBankAccounts());
     }
 
-    public Map<Long, User> getAll() {
-        return new HashMap<>(users.getAll());
+    public List<User> getAll() {
+        return new ArrayList<>(users.getAll());
     }
 
 
     public User findUserById(long id) throws UserNotFoundException {
 
-         return users.findUserById(id)
+
+         return users.findUserById(id).stream()
+                 .filter(s -> s.getUserId() == id)
+                 .findFirst()
                  .orElseThrow(() -> new UserNotFoundException("User not found!"));
+
     }
 
 }

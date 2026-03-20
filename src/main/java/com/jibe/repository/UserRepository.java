@@ -3,9 +3,7 @@ package com.jibe.repository;
 
 import com.jibe.model.User;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
@@ -32,8 +30,8 @@ public class UserRepository {
    }
    
    
-   public Map<Long, User> getAll() {
-       return users;
+   public List<User> getAll() {
+       return new ArrayList<>(users.values());
    }
    
 }
