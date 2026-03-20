@@ -1,7 +1,7 @@
 package com.jibe.controller.impl;
 
 import com.jibe.exceptions.UserNotFoundException;
-import com.jibe.model.User;
+import com.jibe.entity.User;
 
 public interface UserControllerInterface {
 

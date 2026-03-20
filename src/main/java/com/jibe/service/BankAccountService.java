@@ -4,8 +4,8 @@ package com.jibe.service;
 import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.exceptions.InvalidPinException;
-import com.jibe.model.BankAccount;
-import com.jibe.model.User;
+import com.jibe.entity.BankAccount;
+import com.jibe.entity.User;
 import com.jibe.repository.BankAccountRepository;
 
 /**

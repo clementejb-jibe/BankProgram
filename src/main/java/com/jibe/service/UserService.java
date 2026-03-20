@@ -5,8 +5,8 @@ import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.InvalidPasscodeException;
 import com.jibe.exceptions.PasscodeNotMatchException;
 import com.jibe.exceptions.UserNotFoundException;
-import com.jibe.model.BankAccount;
-import com.jibe.model.User;
+import com.jibe.entity.BankAccount;
+import com.jibe.entity.User;
 import com.jibe.repository.UserRepository;
 
 import java.util.*;

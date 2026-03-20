@@ -1,7 +1,7 @@
 
 package com.jibe.repository;
 
-import com.jibe.model.BankAccount;
+import com.jibe.entity.BankAccount;
 
 import java.util.HashMap;
 import java.util.Map;

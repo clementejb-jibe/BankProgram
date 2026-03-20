@@ -9,7 +9,7 @@ import com.jibe.ui.MenuUserInterface;
 import com.jibe.controller.impl.BankAccountControllerInterface;
 import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.exceptions.*;
-import com.jibe.model.User;
+import com.jibe.entity.User;
 import com.jibe.service.UserService;
 
 import java.util.HashMap;
@@ -89,7 +89,7 @@ public class UserController implements UserControllerInterface {
         if (registeredUsers.isEmpty()) {
             throw new NoRegisteredUserException("No registered users.");
         } else {
-            registeredUsers.forEach((_, user) -> System.out.println(user));
+            registeredUsers.forEach((user) -> System.out.println(user));
         }
     }
 

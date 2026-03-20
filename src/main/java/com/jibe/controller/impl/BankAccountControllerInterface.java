@@ -2,8 +2,8 @@ package com.jibe.controller.impl;
 
 import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.InvalidPinException;
-import com.jibe.model.BankAccount;
-import com.jibe.model.User;
+import com.jibe.entity.BankAccount;
+import com.jibe.entity.User;
 
 public interface BankAccountControllerInterface {
     void register(User loggedInUser);

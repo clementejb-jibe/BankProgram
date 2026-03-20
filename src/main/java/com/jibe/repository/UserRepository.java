@@ -1,7 +1,7 @@
 package com.jibe.repository;
 
 
-import com.jibe.model.User;
+import com.jibe.entity.User;
 
 import java.util.*;
 
