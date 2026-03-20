@@ -27,12 +27,12 @@ public class UserService {
 
 
     //Registration
-    public User registerUser(String passcode, String passcodeConfirmation) throws PasscodeNotMatchException {
+    public User registerUser(String fullName, String email, String passcode, String passcodeConfirmation) throws PasscodeNotMatchException {
 
         if (!passcode.equals(passcodeConfirmation)) throw new PasscodeNotMatchException("Passcode not match!");
 
 
-        var newUser = new User(autoSetId, passcode);
+        var newUser = new User(fullName, email, autoSetId, passcode);
 
         users.save(autoSetId, newUser);
 

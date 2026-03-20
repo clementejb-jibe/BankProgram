@@ -52,7 +52,9 @@ public class User {
 
     @Override
     public String toString() {
-        return "User ID: " + getUserId();
+        return "User{" +
+                "userId=" + userId +
+                ", fullName='" + fullName + '\'' +
+                '}';
     }
-
 }

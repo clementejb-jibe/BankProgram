@@ -89,7 +89,7 @@ public class UserController implements UserControllerInterface {
         if (registeredUsers.isEmpty()) {
             throw new NoRegisteredUserException("No registered users.");
         } else {
-            registeredUsers.forEach((user) -> System.out.println(user));
+            registeredUsers.forEach(System.out::println);
         }
     }
 
@@ -103,11 +103,14 @@ public class UserController implements UserControllerInterface {
 
         while (true) {
             try {
-                 userMenuInterface.showRegisterInterface();
+                userMenuInterface.showRegisterInterface();
+
+                var enteredFullName = inputHandler.readString("Enter Full Name: ");
+                var enteredEmail = inputHandler.readString("Enter Email: ");
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
-                var newUser = userService.registerUser(enteredPasscode, passcodeConfirmation);
+                var newUser = userService.registerUser(enteredFullName, enteredEmail, enteredPasscode, passcodeConfirmation);
                 System.out.println("Account created successfully. Your user id is: " + newUser.getUserId());
                 return;
             } catch (PasscodeNotMatchException e) {
@@ -125,7 +128,8 @@ public class UserController implements UserControllerInterface {
             var loggedInUser = login();
 
             if (loggedInUser != null) {
-                System.out.println("Log-in Successful.");
+                System.out.println("Log in Successful.");
+
                 //BankAccount Menus
                 bankController.homeMenu(loggedInUser);
             }
