@@ -28,7 +28,10 @@ public class UserRepository {
    public  Optional<User> findUserById(long userId) {
        return Optional.ofNullable(users.get(userId));
    }
-   
+
+   /*public boolean isEmailExists(String email) {
+       //if (email)
+   }*/
    
    public List<User> getAll() {
        return new ArrayList<>(users.values());
