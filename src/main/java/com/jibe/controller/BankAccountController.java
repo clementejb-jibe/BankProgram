@@ -30,7 +30,7 @@ public class BankAccountController implements BankAccountControllerInterface {
     }
 
 
-    /*
+    /**
      *
      * Bank Operators ( getBalance, deposit, withdraw)
      *
@@ -53,7 +53,6 @@ public class BankAccountController implements BankAccountControllerInterface {
                 return;
             } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
                 System.out.println(e.getMessage());
-                //scan.next();
             }
         }
     }
@@ -89,7 +88,7 @@ public class BankAccountController implements BankAccountControllerInterface {
     }
 
 
-    /*
+    /**
      *
      * Access Account Information  (findAccountNumber, checkAccountInformation, getAllAccounts)
      *
@@ -132,7 +131,7 @@ public class BankAccountController implements BankAccountControllerInterface {
     }
 
 
-    /*
+    /**
      *
      * Essential user interfaces for Bank Main Menu (createBankAccount, loginBankAccount)
      *
@@ -191,7 +190,7 @@ public class BankAccountController implements BankAccountControllerInterface {
     }
 
 
-    /*
+    /**
      *
      * MainMenus of Bank Account user interface (bankAccountHomeMenus, bankMenus)
      *

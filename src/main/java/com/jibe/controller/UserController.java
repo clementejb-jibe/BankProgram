@@ -26,7 +26,7 @@ public class UserController implements UserControllerInterface {
     private final Scanner scan;
     private final BankAccountControllerInterface bankController;
     private final InputHandler inputHandler;
-    private final Map<Integer, Runnable> menus = new HashMap<>();
+    private final Map<Integer, Runnable> menus = new HashMap<>(); //Command pattern
     private final MenuUserInterface userMenuInterface;
 
 
