@@ -23,7 +23,11 @@ public class BankAccountService {
     }
 
     public BankAccount findAccountNumber(long accountNumber) throws BankAccountDoNotExistsException {
-        return bankRepo.findAccountNumber(accountNumber).orElseThrow(() -> new BankAccountDoNotExistsException("Bank account do not exists."));
+        return bankRepo.findAccountNumber(accountNumber)
+                .stream()
+                .filter(b -> b.getAccountNumber() == accountNumber)
+                .findFirst()
+                .orElseThrow(() -> new BankAccountDoNotExistsException("Bank account do not exists."));
     }
 
     public BankAccount createBankAccount(int pin, User user) {
