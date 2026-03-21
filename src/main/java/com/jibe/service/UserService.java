@@ -60,7 +60,7 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return new ArrayList<>(users.getAll());
+        return users.getAll();
     }
 
 
