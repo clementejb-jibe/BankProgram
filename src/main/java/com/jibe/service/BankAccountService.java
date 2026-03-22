@@ -1,8 +1,6 @@
 package com.jibe.service;
 
-
 import com.jibe.exceptions.BankAccountDoNotExistsException;
-import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.exceptions.InvalidPinException;
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.User;
@@ -18,15 +16,14 @@ public class BankAccountService {
     private long autoSetAccountNum = 10001;
 
 
-    public BankAccountService() {
-        this.bankRepo = new BankAccountRepository();
+
+    public BankAccountService(BankAccountRepository bankRepo) {
+        this.bankRepo = bankRepo;
+
     }
 
     public BankAccount findAccountNumber(long accountNumber) throws BankAccountDoNotExistsException {
         return bankRepo.findAccountNumber(accountNumber)
-                .stream()
-                .filter(b -> b.getAccountNumber() == accountNumber)
-                .findFirst()
                 .orElseThrow(() -> new BankAccountDoNotExistsException("Bank account do not exists."));
     }
 
@@ -47,34 +44,6 @@ public class BankAccountService {
 
         return account.getBalance();
     }
-
-    public void deposit(long accountNumber, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {
-
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must not be negative");
-        }
-
-        var account = findAccountNumber(accountNumber);
-
-        account.deposit(amount);
-    }
-
-    public void withdraw(long accountNumber, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must not be negative!");
-        }
-
-        if (amount > getBalance(accountNumber)) {
-            throw new InvalidAmountException("Insufficient funds!");
-        }
-
-        var account = findAccountNumber(accountNumber);
-
-
-        account.withdraw(amount);
-
-    }
-
 
     //Check Pin if valid
     public boolean checkPin(int pin) {

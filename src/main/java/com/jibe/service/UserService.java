@@ -8,6 +8,7 @@ import com.jibe.exceptions.UserNotFoundException;
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.User;
 import com.jibe.repository.UserRepository;
+import com.jibe.util.SecurityUtil;
 
 import java.util.*;
 
@@ -19,9 +20,11 @@ public class UserService {
 
     private final UserRepository users;
     private long autoSetId = 1001;
+    private final SecurityUtil securityUtil;
 
-    public UserService() {
-        this.users = new UserRepository();
+    public UserService(UserRepository userRepository, SecurityUtil securityUtil) {
+        this.users = userRepository;
+        this.securityUtil = securityUtil;
 
     }
 
@@ -31,8 +34,10 @@ public class UserService {
 
         if (!passcode.equals(passcodeConfirmation)) throw new PasscodeNotMatchException("Passcode not match!");
 
+        var hiddenPasscode = securityUtil.hashPasscode(passcode);
 
-        var newUser = new User(fullName, email, autoSetId, passcode);
+
+        var newUser = new User(fullName, email, autoSetId, hiddenPasscode);
 
         users.save(autoSetId, newUser);
 
@@ -45,7 +50,9 @@ public class UserService {
     public User loginUser(long userId, String passcode) throws InvalidPasscodeException, UserNotFoundException {
         var user = findUserById(userId);
 
-        if (user.getPasscode().equals(passcode))
+        var hiddenPasscode = securityUtil.hashPasscode(passcode);
+
+        if (user.getPasscode().equals(hiddenPasscode))
             return user;
         else
             throw new InvalidPasscodeException("Passcode is invalid!");
@@ -68,9 +75,7 @@ public class UserService {
     public User findUserById(long id) throws UserNotFoundException {
 
 
-         return users.findUserById(id).stream()
-                 .filter(s -> s.getUserId() == id)
-                 .findFirst()
+         return users.findUserById(id)
                  .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
     }

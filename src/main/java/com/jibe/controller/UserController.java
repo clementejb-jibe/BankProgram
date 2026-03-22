@@ -11,10 +11,11 @@ import com.jibe.controller.impl.UserControllerInterface;
 import com.jibe.exceptions.*;
 import com.jibe.entity.User;
 import com.jibe.service.UserService;
+import com.jibe.util.InputHandler;
+import com.jibe.util.SecurityUtil;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
 /**
  *
@@ -23,20 +24,20 @@ import java.util.Scanner;
 public class UserController implements UserControllerInterface {
 
     private final UserService userService;
-    private final Scanner scan;
     private final BankAccountControllerInterface bankController;
     private final InputHandler inputHandler;
     private final Map<Integer, Runnable> menus = new HashMap<>(); //Command pattern
     private final MenuUserInterface userMenuInterface;
 
 
+
     public UserController(UserService service, BankAccountControllerInterface bankController,
-                          InputHandler inputHandle, Scanner scan,  MenuUserInterface userMenuInterface) {
+                          InputHandler inputHandle,  MenuUserInterface userMenuInterface) {
         this.userService = service;
         this.bankController = bankController;
         this.inputHandler = inputHandle;
-        this.scan = scan;
         this.userMenuInterface = userMenuInterface;
+
     }
 
     // List of Options in Main Menu
@@ -110,7 +111,7 @@ public class UserController implements UserControllerInterface {
                 var enteredPasscode = inputHandler.readString("Create Passcode: ");
                 var passcodeConfirmation = inputHandler.readString("Confirm Passcode: ");
 
-                var newUser = userService.registerUser(enteredFullName, enteredEmail, enteredPasscode, passcodeConfirmation);
+                var newUser = userService.registerUser(enteredFullName.toUpperCase(), enteredEmail, enteredPasscode, passcodeConfirmation);
                 System.out.println("Account created successfully. Your user id is: " + newUser.getUserId());
                 return;
             } catch (PasscodeNotMatchException e) {
@@ -149,7 +150,7 @@ public class UserController implements UserControllerInterface {
                 userMenuInterface.showLoginInterface();
 
                 var enteredUserId = inputHandler.readLong("Enter User ID: ");
-                scan.nextLine();
+                inputHandler.readStringLine();
 
                 var enteredPasscode = inputHandler.readString("Enter Passcode: ");
 
@@ -184,7 +185,7 @@ public class UserController implements UserControllerInterface {
                 userMenuInterface.showMenu();
 
                 var selectOption = inputHandler.readInt("  Select Option: ");
-                scan.nextLine();
+                inputHandler.readStringLine();
 
                 var commands = menus.get(selectOption);
 

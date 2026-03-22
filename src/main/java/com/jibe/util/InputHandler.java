@@ -1,4 +1,4 @@
-package com.jibe.controller;
+package com.jibe.util;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -54,6 +54,9 @@ public class InputHandler {
     public String readString(String message) {
         System.out.print(message);
         return scan.nextLine();
+    }
 
+    public void readStringLine() {
+        scan.nextLine();
     }
 }

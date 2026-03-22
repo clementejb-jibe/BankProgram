@@ -2,6 +2,7 @@
 package com.jibe.entity;
 
 
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -34,7 +35,7 @@ public class User {
 
     //Get All Accounts
     public List<BankAccount> getBankAccounts() {
-        return bankAccounts;
+        return Collections.unmodifiableList(bankAccounts);
     }
 
     public String getFullName() {

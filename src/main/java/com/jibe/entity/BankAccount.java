@@ -36,13 +36,10 @@ public class BankAccount {
         return balance;
     }
 
-    public void deposit(double amount) {
-        this.balance += amount;
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
-    public void withdraw(double amount) {
-        this.balance -= amount;
-    }
 
     @Override
     public String toString() {

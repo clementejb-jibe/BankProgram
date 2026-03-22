@@ -9,6 +9,7 @@ import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
 import com.jibe.ui.BankAccountInterface;
 import com.jibe.ui.MenuUserInterface;
+import com.jibe.util.InputHandler;
 
 
 /**
@@ -20,13 +21,19 @@ public class BankAccountController implements BankAccountControllerInterface {
     private final BankAccountService bankService;
     private final UserService userService;
     private final InputHandler inputHandler;
+    private final TransactionController transactionController;
     private final MenuUserInterface bankInterface;
     //Constructor
-    public BankAccountController(BankAccountService service, UserService userService, InputHandler inputHandler, MenuUserInterface bankInterface) {
+    public BankAccountController(BankAccountService service,
+                                 UserService userService,
+                                 InputHandler inputHandler,
+                                 MenuUserInterface bankInterface,
+                                 TransactionController transactionController) {
         this.bankService = service;
         this.userService = userService;
         this.inputHandler = inputHandler;
         this.bankInterface = bankInterface;
+        this.transactionController = transactionController;
     }
 
 
@@ -37,7 +44,7 @@ public class BankAccountController implements BankAccountControllerInterface {
      */
 
     //Deposit
-    public void deposit(BankAccount loggedInAccount) {
+    /*public void deposit(BankAccount loggedInAccount) {
 
         while (true) {
             try {
@@ -76,7 +83,7 @@ public class BankAccountController implements BankAccountControllerInterface {
                 System.out.println(e.getMessage());
             }
         }
-    }
+    }*/
 
     //Get Balance
     public void getBalance(BankAccount loggedInAccount) throws BankAccountDoNotExistsException {
@@ -241,17 +248,18 @@ public class BankAccountController implements BankAccountControllerInterface {
 
                 switch (options) {
                     case 1 -> getBalance(loggedInAccount);
-                    case 2 -> deposit(loggedInAccount);
-                    case 3 -> withdraw(loggedInAccount);
+                    case 2 -> transactionController.deposit(loggedInAccount);
+                    case 3 -> transactionController.withdraw(loggedInAccount);
                     case 4 -> getAccountLoggedInInformation(loggedInAccount);
-                    case 5 -> isBankMainMenuRunning = false;
-                    case 6 -> System.exit(0);
+                    case 5 -> transactionController.getTransactionByAccountNumber(loggedInAccount);
+                    case 6 -> isBankMainMenuRunning = false;
+                    case 7 -> isBankMainMenuRunning = false;
                     default -> System.out.println("Option is not on the selection, please try again!");
 
                 }
 
-            } catch (BankAccountDoNotExistsException e) {
-                throw new RuntimeException(e);
+            } catch (BankAccountDoNotExistsException | InvalidAmountException e) {
+                System.out.println(e.getMessage());
             }
 
         }
