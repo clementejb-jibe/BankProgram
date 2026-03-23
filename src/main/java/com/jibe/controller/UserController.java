@@ -12,7 +12,6 @@ import com.jibe.exceptions.*;
 import com.jibe.entity.User;
 import com.jibe.service.UserService;
 import com.jibe.util.InputHandler;
-import com.jibe.util.SecurityUtil;
 
 import java.util.HashMap;
 import java.util.Map;

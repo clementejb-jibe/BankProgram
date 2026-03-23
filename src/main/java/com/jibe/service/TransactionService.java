@@ -20,6 +20,7 @@ public class TransactionService {
         transactionRepository.save(transaction);
     }
 
+    // This method find the bank account by account number then fetch the all transaction of the bank account.
     public List<Transaction> findByAccountNumber(long accountNumber) {
         var transacts = transactionRepository.findByAccountNumber(accountNumber);
         if (transacts.isEmpty()) {

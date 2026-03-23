@@ -19,7 +19,6 @@ public class BankAccountService {
 
     public BankAccountService(BankAccountRepository bankRepo) {
         this.bankRepo = bankRepo;
-
     }
 
     public BankAccount findAccountNumber(long accountNumber) throws BankAccountDoNotExistsException {

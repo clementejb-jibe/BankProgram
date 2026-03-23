@@ -11,6 +11,8 @@ import com.jibe.ui.BankAccountInterface;
 import com.jibe.ui.MenuUserInterface;
 import com.jibe.util.InputHandler;
 
+import java.util.stream.Stream;
+
 
 /**
  *
@@ -39,51 +41,9 @@ public class BankAccountController implements BankAccountControllerInterface {
 
     /**
      *
-     * Bank Operators ( getBalance, deposit, withdraw)
+     * Bank Operators ( getBalance)
      *
      */
-
-    //Deposit
-    /*public void deposit(BankAccount loggedInAccount) {
-
-        while (true) {
-            try {
-                var accNumber = loggedInAccount.getAccountNumber();
-
-                ((BankAccountInterface) bankInterface).showDepositInterface();
-
-                var amount = inputHandler.readDouble("Enter Amount: ");
-
-                bankService.deposit(accNumber, amount);
-
-                System.out.println("Deposit successful! New Balance: " + bankService.getBalance(accNumber));
-                return;
-            } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }
-
-    //Withdraw
-    public void withdraw(BankAccount loggedInAccount) {
-
-
-        while (true) {
-            try {
-                var accountNumber = loggedInAccount.getAccountNumber();
-
-                ((BankAccountInterface) bankInterface).showWithdrawInterface();
-
-                var withdrawAmount = inputHandler.readDouble("Enter Amount: ");
-
-                bankService.withdraw(accountNumber, withdrawAmount);
-                System.out.println("Withdraw successful! New Balance: " + bankService.getBalance(accountNumber));
-                return;
-            } catch (InvalidAmountException | BankAccountDoNotExistsException e) {
-                System.out.println(e.getMessage());
-            }
-        }
-    }*/
 
     //Get Balance
     public void getBalance(BankAccount loggedInAccount) throws BankAccountDoNotExistsException {
@@ -129,6 +89,8 @@ public class BankAccountController implements BankAccountControllerInterface {
         ((BankAccountInterface) bankInterface).showLoggedInAccountInterface();
 
         System.out.println(bankService.findAccountNumber(accountNumber));
+
+       // System.out.println(bankService.findAccountNumber(accountNumber));
     }
 
     // Fetch the all registered accounts from logged-in User
@@ -253,7 +215,6 @@ public class BankAccountController implements BankAccountControllerInterface {
                     case 4 -> getAccountLoggedInInformation(loggedInAccount);
                     case 5 -> transactionController.getTransactionByAccountNumber(loggedInAccount);
                     case 6 -> isBankMainMenuRunning = false;
-                    case 7 -> isBankMainMenuRunning = false;
                     default -> System.out.println("Option is not on the selection, please try again!");
 
                 }
