@@ -5,9 +5,9 @@
 package com.jibe.controller;
 
 
-import com.jibe.ui.MenuUserInterface;
-import com.jibe.controller.impl.BankAccountControllerInterface;
-import com.jibe.controller.impl.UserControllerInterface;
+import com.jibe.ui.MenuUserImp;
+import com.jibe.controller.impl.BankAccountControllerImp;
+import com.jibe.controller.impl.UserControllerImp;
 import com.jibe.exceptions.*;
 import com.jibe.entity.User;
 import com.jibe.service.UserService;
@@ -20,18 +20,18 @@ import java.util.Map;
  *
  * @author Win11
  */
-public class UserController implements UserControllerInterface {
+public class UserController implements UserControllerImp {
 
     private final UserService userService;
-    private final BankAccountControllerInterface bankController;
+    private final BankAccountControllerImp bankController;
     private final InputHandler inputHandler;
     private final Map<Integer, Runnable> menus = new HashMap<>(); //Command pattern
-    private final MenuUserInterface userMenuInterface;
+    private final MenuUserImp userMenuInterface;
 
 
 
-    public UserController(UserService service, BankAccountControllerInterface bankController,
-                          InputHandler inputHandle,  MenuUserInterface userMenuInterface) {
+    public UserController(UserService service, BankAccountControllerImp bankController,
+                          InputHandler inputHandle,  MenuUserImp userMenuInterface) {
         this.userService = service;
         this.bankController = bankController;
         this.inputHandler = inputHandle;

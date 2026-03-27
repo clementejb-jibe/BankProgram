@@ -5,7 +5,7 @@ import com.jibe.exceptions.InvalidPinException;
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.User;
 
-public interface BankAccountControllerInterface {
+public interface BankAccountControllerImp {
     void register(User loggedInUser);
     BankAccount login(User loggedInUser) throws InvalidPinException, BankAccountDoNotExistsException;
     void find(User user) throws BankAccountDoNotExistsException;

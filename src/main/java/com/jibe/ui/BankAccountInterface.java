@@ -1,6 +1,6 @@
 package com.jibe.ui;
 
-public class BankAccountInterface implements MenuUserInterface {
+public class BankAccountInterface implements MenuUserImp {
     @Override
     public void showMenu() {
         System.out.println("""

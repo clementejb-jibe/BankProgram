@@ -1,14 +1,14 @@
 
 package com.jibe.controller;
 
-import com.jibe.controller.impl.BankAccountControllerInterface;
+import com.jibe.controller.impl.BankAccountControllerImp;
 import com.jibe.exceptions.*;
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
 import com.jibe.ui.BankAccountInterface;
-import com.jibe.ui.MenuUserInterface;
+import com.jibe.ui.MenuUserImp;
 import com.jibe.util.InputHandler;
 
 
@@ -17,18 +17,18 @@ import com.jibe.util.InputHandler;
  *
  * @author Win11
  */
-public class BankAccountController implements BankAccountControllerInterface {
+public class BankAccountController implements BankAccountControllerImp {
 
     private final BankAccountService bankService;
     private final UserService userService;
     private final InputHandler inputHandler;
     private final TransactionController transactionController;
-    private final MenuUserInterface bankInterface;
+    private final MenuUserImp bankInterface;
     //Constructor
     public BankAccountController(BankAccountService service,
                                  UserService userService,
                                  InputHandler inputHandler,
-                                 MenuUserInterface bankInterface,
+                                 MenuUserImp bankInterface,
                                  TransactionController transactionController) {
         this.bankService = service;
         this.userService = userService;

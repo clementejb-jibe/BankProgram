@@ -1,6 +1,6 @@
 package com.jibe.ui;
 
-public interface MenuUserInterface {
+public interface MenuUserImp {
      void showMenu();
      void showRegisterInterface();
      void showLoginInterface();

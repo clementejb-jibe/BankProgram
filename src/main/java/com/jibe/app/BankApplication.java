@@ -1,16 +1,16 @@
 
 package com.jibe.app;
 
-import com.jibe.controller.impl.UserControllerInterface;
+import com.jibe.controller.impl.UserControllerImp;
 
 /**
  *
  * @author Win11
  */
 public class BankApplication implements Runnable{
-    private final UserControllerInterface controller;
+    private final UserControllerImp controller;
     
-    public BankApplication(UserControllerInterface controller) {
+    public BankApplication(UserControllerImp controller) {
         this.controller = controller;
     }
     
