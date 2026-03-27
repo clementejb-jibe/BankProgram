@@ -5,6 +5,7 @@ import com.jibe.entity.Transaction;
 import com.jibe.entity.TransactionType;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.repository.TransactionRepository;
+import com.jibe.service.impl.TransactionStrategy;
 
 /**
  * A concrete implementation of {@link TransactionStrategy} that handles deposit transactions.

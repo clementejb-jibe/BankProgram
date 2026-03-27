@@ -1,4 +1,4 @@
-package com.jibe.service;
+package com.jibe.service.impl;
 
 import com.jibe.entity.BankAccount;
 import com.jibe.exceptions.InvalidAmountException;
