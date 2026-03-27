@@ -5,15 +5,18 @@ import com.jibe.entity.TransactionType;
 import com.jibe.exceptions.EmptyTransactionException;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.service.TransactionService;
+import com.jibe.ui.TransactionUI;
 import com.jibe.util.InputHandler;
 
 public class TransactionController {
     private final TransactionService transactionService;
     private final InputHandler inputHandler;
+    private final TransactionUI transactionUI;
 
-    public TransactionController(TransactionService transactionService, InputHandler inputHandler) {
+    public TransactionController(TransactionService transactionService, InputHandler inputHandler,  TransactionUI transactionUI) {
         this.transactionService = transactionService;
         this.inputHandler = inputHandler;
+        this.transactionUI = transactionUI;
     }
 
     public void handleDeposit(BankAccount bankAccount) throws InvalidAmountException {
@@ -22,6 +25,9 @@ public class TransactionController {
         var type = TransactionType.DEPOSIT;
 
         while (true) {
+
+            transactionUI.depositInterface();
+
             try {
                 var amount = inputHandler.readDouble("Enter amount to deposit: ");
                 transactionService.process(type, bankAccount, amount);
@@ -40,6 +46,9 @@ public class TransactionController {
         var type = TransactionType.WITHDRAW;
 
         while (true) {
+
+            transactionUI.withdrawInterface();
+
             try {
                 var amount = inputHandler.readDouble("Enter amount to withdraw: ");
                 transactionService.process(type, bankAccount, amount);

@@ -1,7 +1,6 @@
 package com.jibe.service;
 
 import com.jibe.entity.BankAccount;
-import com.jibe.entity.Transaction;
 import com.jibe.exceptions.InvalidAmountException;
 
 /**
