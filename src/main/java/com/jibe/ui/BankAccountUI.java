@@ -1,6 +1,6 @@
 package com.jibe.ui;
 
-public class BankAccountInterface implements MenuUserImp {
+public class BankAccountUI implements MenuUserImp {
     @Override
     public void showMenu() {
         System.out.println("""
@@ -36,6 +36,7 @@ public class BankAccountInterface implements MenuUserImp {
                 +-------------------------------+""");
     }
 
+    @Override
     public void showLoginInterface() {
         System.out.println("""
                 +-------------------------------+
@@ -43,6 +44,7 @@ public class BankAccountInterface implements MenuUserImp {
                 +-------------------------------+""");
     }
 
+    @Override
     public void showFindAccountInterface() {
         System.out.println("""
                 +-------------------------------+
@@ -50,30 +52,7 @@ public class BankAccountInterface implements MenuUserImp {
                 +-------------------------------+""");
     }
 
-
-    public void showGetBalanceInterface() {
-        System.out.println("""
-                +-------------------------------+
-                |      BANK ACCOUNT BALANCE     |
-                +-------------------------------+""");
-    }
-
-
-    public void showDepositInterface() {
-        System.out.println("""
-                +-------------------------------+
-                |            DEPOSIT            |
-                +-------------------------------+""");
-    }
-
-    public void showWithdrawInterface() {
-        System.out.println("""
-                +-------------------------------+
-                |            WITHDRAW           |
-                +-------------------------------+""");
-    }
-
-
+    @Override
     public void showGetAllAccountsInterface() {
         System.out.println("""
                 +-------------------------------+
@@ -81,10 +60,17 @@ public class BankAccountInterface implements MenuUserImp {
                 +-------------------------------+""");
     }
 
-    public void showLoggedInAccountInterface() {
+    public void showAccountInformationInterface() {
         System.out.println("""
                 +-------------------------------+
                 |        ACCOUNTS DETAILS       |
+                +-------------------------------+""");
+    }
+
+    public void showGetBalanceInterface() {
+        System.out.println("""
+                +-------------------------------+
+                |      BANK ACCOUNT BALANCE     |
                 +-------------------------------+""");
     }
 }

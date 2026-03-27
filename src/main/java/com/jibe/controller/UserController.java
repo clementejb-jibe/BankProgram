@@ -26,16 +26,16 @@ public class UserController implements UserControllerImp {
     private final BankAccountControllerImp bankController;
     private final InputHandler inputHandler;
     private final Map<Integer, Runnable> menus = new HashMap<>(); //Command pattern
-    private final MenuUserImp userMenuInterface;
+    private final MenuUserImp userUI;
 
 
 
     public UserController(UserService service, BankAccountControllerImp bankController,
-                          InputHandler inputHandle,  MenuUserImp userMenuInterface) {
+                          InputHandler inputHandle,  MenuUserImp userUI) {
         this.userService = service;
         this.bankController = bankController;
         this.inputHandler = inputHandle;
-        this.userMenuInterface = userMenuInterface;
+        this.userUI = userUI;
 
     }
 
@@ -61,7 +61,7 @@ public class UserController implements UserControllerImp {
         while (searchAttempts > 0) {
 
             try {
-                 userMenuInterface.showFindAccountInterface();
+                 userUI.showFindAccountInterface();
 
                 var searchId = inputHandler.readLong("Enter User Id: ");
 
@@ -86,6 +86,8 @@ public class UserController implements UserControllerImp {
 
         var registeredUsers = userService.getAll();
 
+        userUI.showGetAllAccountsInterface();
+
         if (registeredUsers.isEmpty()) {
             throw new NoRegisteredUserException("No registered users.");
         } else {
@@ -103,7 +105,7 @@ public class UserController implements UserControllerImp {
 
         while (true) {
             try {
-                userMenuInterface.showRegisterInterface();
+                userUI.showRegisterInterface();
 
                 var enteredFullName = inputHandler.readString("Enter Full Name: ");
                 var enteredEmail = inputHandler.readString("Enter Email: ");
@@ -146,7 +148,7 @@ public class UserController implements UserControllerImp {
         while (attempts > 0) {
 
             try {
-                userMenuInterface.showLoginInterface();
+                userUI.showLoginInterface();
 
                 var enteredUserId = inputHandler.readLong("Enter User ID: ");
                 inputHandler.readStringLine();
@@ -181,7 +183,7 @@ public class UserController implements UserControllerImp {
         while (running) {
             try {
 
-                userMenuInterface.showMenu();
+                userUI.showMenu();
 
                 var selectOption = inputHandler.readInt("  Select Option: ");
                 inputHandler.readStringLine();

@@ -1,6 +1,6 @@
 package com.jibe.ui;
 
-public class UserInterface implements MenuUserImp {
+public class UserUI implements MenuUserImp {
     public void showMenu() {
         System.out.println("""
                 +-------------------------------+
@@ -35,7 +35,10 @@ public class UserInterface implements MenuUserImp {
     }
 
     public void showGetAllAccountsInterface() {
-
+        System.out.println("""
+                +-------------------------------+
+                |            ACCOUNTS           |
+                +-------------------------------+""");
     }
 
 }

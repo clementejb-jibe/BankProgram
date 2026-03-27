@@ -7,7 +7,7 @@ import com.jibe.entity.BankAccount;
 import com.jibe.entity.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
-import com.jibe.ui.BankAccountInterface;
+import com.jibe.ui.BankAccountUI;
 import com.jibe.ui.MenuUserImp;
 import com.jibe.util.InputHandler;
 
@@ -48,7 +48,7 @@ public class BankAccountController implements BankAccountControllerImp {
     public void getBalance(BankAccount loggedInAccount) throws BankAccountDoNotExistsException {
         var accountNumber = loggedInAccount.getAccountNumber();
 
-        ((BankAccountInterface) bankInterface).showGetBalanceInterface();
+        ((BankAccountUI) bankInterface).showGetBalanceInterface();
 
         System.out.println("Bank Account Balance: " + bankService.getBalance(accountNumber));
     }
@@ -85,7 +85,7 @@ public class BankAccountController implements BankAccountControllerImp {
 
         var accountNumber = bankAccount.getAccountNumber();
 
-        ((BankAccountInterface) bankInterface).showLoggedInAccountInterface();
+        ((BankAccountUI) bankInterface).showAccountInformationInterface();
 
         System.out.println(bankService.findAccountNumber(accountNumber));
 
@@ -203,7 +203,7 @@ public class BankAccountController implements BankAccountControllerImp {
         while (isBankMainMenuRunning) {
             try {
 
-                ((BankAccountInterface) bankInterface).showBankMenu();
+                ((BankAccountUI) bankInterface).showBankMenu();
 
                 int options = inputHandler.readInt("Select: ");
 
