@@ -1,6 +1,7 @@
 package com.jibe.controller;
 
 import com.jibe.entity.BankAccount;
+import com.jibe.entity.TransactionType;
 import com.jibe.exceptions.EmptyTransactionException;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.service.TransactionService;
@@ -15,13 +16,15 @@ public class TransactionController {
         this.inputHandler = inputHandler;
     }
 
-    public void deposit(BankAccount bankAccount) throws InvalidAmountException {
+    public void handleDeposit(BankAccount bankAccount) throws InvalidAmountException {
 
+        // Declaration of transaction type
+        var type = TransactionType.DEPOSIT;
 
         while (true) {
             try {
                 var amount = inputHandler.readDouble("Enter amount to deposit: ");
-                transactionService.deposit(bankAccount, amount);
+                transactionService.process(type, bankAccount, amount);
 
 
                 System.out.println("Deposit successful, new balance: " +  bankAccount.getBalance());
@@ -32,11 +35,14 @@ public class TransactionController {
         }
     }
 
-    public void withdraw(BankAccount bankAccount) throws InvalidAmountException {
+    public void handleWithdraw(BankAccount bankAccount) throws InvalidAmountException {
+
+        var type = TransactionType.WITHDRAW;
+
         while (true) {
             try {
                 var amount = inputHandler.readDouble("Enter amount to withdraw: ");
-                transactionService.withdraw(bankAccount, amount);
+                transactionService.process(type, bankAccount, amount);
 
                 System.out.println("Withdraw successful, new balance: " +  bankAccount.getBalance());
                 return;

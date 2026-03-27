@@ -16,9 +16,6 @@ public class TransactionService {
         this.transactionRepository = transactionRepository;
     }
 
-    public void save(Transaction transaction) {
-        transactionRepository.save(transaction);
-    }
 
     // This method find the bank account by account number then fetch the all transaction of the bank account.
     public List<Transaction> findByAccountNumber(long accountNumber) {
@@ -29,39 +26,25 @@ public class TransactionService {
         return transacts;
     }
 
-    public void deposit(BankAccount bankAccount, double amount) throws InvalidAmountException {
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must be greater than 0");
+    /**
+     * Handles the Transaction Type by using Strategy Pattern.
+     * The strategy will handle the behavior of each type of transaction.
+     * If transaction type is DEPOSIT or WITHDRAW, it will create an object that implements TransactionStrategy
+     */
+
+    public void process(TransactionType type, BankAccount bankAccount, double amount) throws InvalidAmountException {
+        TransactionStrategy strategy;
+
+        switch (type) {
+            case DEPOSIT -> {
+                strategy = new DepositStrategy(transactionRepository);
+                strategy.process(bankAccount, amount);
+            }
+            case WITHDRAW -> {
+                strategy = new WithdrawStrategy(transactionRepository);
+                strategy.process(bankAccount, amount);
+            }
         }
 
-        bankAccount.setBalance(bankAccount.getBalance() + amount);
-
-        var transact = new Transaction(
-                TransactionType.DEPOSIT,
-                bankAccount.getAccountNumber(),
-                amount
-        );
-        save(transact);
-
-
-    }
-
-    public void withdraw(BankAccount bankAccount, double amount) throws InvalidAmountException {
-        if (amount <= 0) {
-            throw new InvalidAmountException("Amount must be greater than 0");
-        }
-
-        if (bankAccount.getBalance() < amount) {
-            throw new InvalidAmountException("Balance is insufficient");
-        }
-
-        bankAccount.setBalance(bankAccount.getBalance() - amount);
-
-        var transact = new Transaction(
-                TransactionType.WITHDRAW,
-                bankAccount.getAccountNumber(),
-                amount
-        );
-        save(transact);
     }
 }

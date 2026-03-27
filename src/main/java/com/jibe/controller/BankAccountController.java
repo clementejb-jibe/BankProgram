@@ -11,7 +11,6 @@ import com.jibe.ui.BankAccountInterface;
 import com.jibe.ui.MenuUserInterface;
 import com.jibe.util.InputHandler;
 
-import java.util.stream.Stream;
 
 
 /**
@@ -210,8 +209,8 @@ public class BankAccountController implements BankAccountControllerInterface {
 
                 switch (options) {
                     case 1 -> getBalance(loggedInAccount);
-                    case 2 -> transactionController.deposit(loggedInAccount);
-                    case 3 -> transactionController.withdraw(loggedInAccount);
+                    case 2 -> transactionController.handleDeposit(loggedInAccount);
+                    case 3 -> transactionController.handleWithdraw(loggedInAccount);
                     case 4 -> getAccountLoggedInInformation(loggedInAccount);
                     case 5 -> transactionController.getTransactionByAccountNumber(loggedInAccount);
                     case 6 -> isBankMainMenuRunning = false;
