@@ -211,9 +211,10 @@ public class BankAccountController implements BankAccountControllerImp {
                     case 1 -> getBalance(loggedInAccount);
                     case 2 -> transactionController.handleDeposit(loggedInAccount);
                     case 3 -> transactionController.handleWithdraw(loggedInAccount);
-                    case 4 -> getAccountLoggedInInformation(loggedInAccount);
-                    case 5 -> transactionController.getTransactionByAccountNumber(loggedInAccount);
-                    case 6 -> isBankMainMenuRunning = false;
+                    case 4 -> transactionController.handleTransfer(loggedInAccount);
+                    case 5 -> getAccountLoggedInInformation(loggedInAccount);
+                    case 6 -> transactionController.getTransactionByAccountNumber(loggedInAccount);
+                    case 7 -> isBankMainMenuRunning = false;
                     default -> System.out.println("Option is not on the selection, please try again!");
 
                 }

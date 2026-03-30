@@ -7,6 +7,7 @@ import com.jibe.repository.BankAccountRepository;
 import com.jibe.repository.TransactionRepository;
 import com.jibe.repository.UserRepository;
 import com.jibe.service.TransactionService;
+import com.jibe.service.TransferService;
 import com.jibe.ui.TransactionUI;
 import com.jibe.util.InputHandler;
 import com.jibe.controller.UserController;
@@ -35,10 +36,11 @@ public class Main {
         var scan = new Scanner(System.in);
         var inputHandler = new InputHandler(scan);
 
-
+        //Services
         var bankService = new BankAccountService(bankAccountRepository);
         var userService = new UserService(userRepository, securityUtil);
         var transactionService = new TransactionService(transactionRepository);
+        var transferService = new TransferService(transactionRepository);
 
         //UI
         MenuUserImp bankInterface = new BankAccountUI();
@@ -47,7 +49,7 @@ public class Main {
 
 
         //Controllers
-        TransactionController transactionController = new TransactionController(transactionService, inputHandler, transactionUI);
+        TransactionController transactionController = new TransactionController(transactionService, transferService , bankService, inputHandler, transactionUI);
         BankAccountControllerImp bankController = new BankAccountController(bankService, userService, inputHandler, bankInterface, transactionController);
         UserControllerImp userController = new UserController(userService, bankController, inputHandler, userMenuInterface);
 

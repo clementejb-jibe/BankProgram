@@ -2,21 +2,28 @@ package com.jibe.controller;
 
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.TransactionType;
+import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.EmptyTransactionException;
 import com.jibe.exceptions.InvalidAmountException;
+import com.jibe.service.BankAccountService;
 import com.jibe.service.TransactionService;
+import com.jibe.service.TransferService;
 import com.jibe.ui.TransactionUI;
 import com.jibe.util.InputHandler;
 
 public class TransactionController {
     private final TransactionService transactionService;
+    private final TransferService transferService;
+    private final BankAccountService bankService;
     private final InputHandler inputHandler;
     private final TransactionUI transactionUI;
 
-    public TransactionController(TransactionService transactionService, InputHandler inputHandler,  TransactionUI transactionUI) {
+    public TransactionController(TransactionService transactionService, TransferService transferService, BankAccountService bankService, InputHandler inputHandler, TransactionUI transactionUI) {
         this.transactionService = transactionService;
         this.inputHandler = inputHandler;
         this.transactionUI = transactionUI;
+        this.transferService = transferService;
+        this.bankService = bankService;
     }
 
     public void handleDeposit(BankAccount bankAccount) throws InvalidAmountException {
@@ -62,7 +69,25 @@ public class TransactionController {
 
     }
 
-    public void getTransactionByAccountNumber(BankAccount bankAccount) throws InvalidAmountException {
+    public void handleTransfer(BankAccount from){
+        while (true) {
+            try {
+
+
+                var receiver = inputHandler.readLong("Enter Account Number to transfer: ");
+                BankAccount to = bankService.findAccountNumber(receiver);
+
+                var amount = inputHandler.readDouble("Enter amount: ");
+                transferService.transfer(from, to, amount);
+                return;
+            } catch (InvalidAmountException | BankAccountDoNotExistsException e)  {
+                System.out.println(e.getMessage());
+            }
+        }
+
+    }
+
+    public void getTransactionByAccountNumber(BankAccount bankAccount)  {
 
         try {
             var accountNumber = bankAccount.getAccountNumber();

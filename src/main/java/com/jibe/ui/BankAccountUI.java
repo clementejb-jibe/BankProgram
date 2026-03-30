@@ -23,9 +23,10 @@ public class BankAccountUI implements MenuUserImp {
                 | 1. Check Balance              |
                 | 2. Deposit                    |
                 | 3. Withdraw                   |
-                | 4. Account Information        |
-                | 5. Sign out                   |
-                | 6. Exit                       |""");
+                | 4. Transfer                   |
+                | 5. Account Information        |
+                | 6. Transaction History        |
+                | 7. Sign out                   |""");
     }
 
     @Override

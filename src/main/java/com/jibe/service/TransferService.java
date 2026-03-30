@@ -3,7 +3,6 @@ package com.jibe.service;
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.Transaction;
 import com.jibe.entity.TransactionType;
-import com.jibe.exceptions.BankAccountDoNotExistsException;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.repository.TransactionRepository;
 
@@ -15,7 +14,7 @@ public class TransferService {
 
     }
 
-    public void process(BankAccount from, BankAccount to, double amount) throws InvalidAmountException, BankAccountDoNotExistsException {
+    public void transfer(BankAccount from, BankAccount to, double amount) throws InvalidAmountException {
 
 
         if (amount <= 0) {

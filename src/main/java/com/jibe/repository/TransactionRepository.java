@@ -13,7 +13,7 @@ public class TransactionRepository {
         this.transactions.add(transaction);
     }
 
-    // Get transactions
+    // Get All transactions of single bank account
     public List<Transaction> findByAccountNumber(long accountNumber) {
         return transactions.stream()
                 .filter(t -> t.accountNumber() == accountNumber)
