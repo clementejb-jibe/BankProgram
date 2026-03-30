@@ -35,10 +35,10 @@ public class Main {
         var scan = new Scanner(System.in);
         var inputHandler = new InputHandler(scan);
 
-        var transactionService = new TransactionService(transactionRepository);
+
         var bankService = new BankAccountService(bankAccountRepository);
         var userService = new UserService(userRepository, securityUtil);
-
+        var transactionService = new TransactionService(transactionRepository);
 
         //UI
         MenuUserImp bankInterface = new BankAccountUI();
