@@ -80,4 +80,16 @@ public class UserService {
 
     }
 
+    //Data Validation (Email)
+    public boolean isEmailExists(String email) {
+
+        for (var u : users.getAll()) {
+            if (u.getEmail().equals(email)) {
+            return true;
+            }
+        }
+        return false;
+    }
+
+
 }
