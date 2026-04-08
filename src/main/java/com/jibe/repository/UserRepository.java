@@ -2,6 +2,7 @@ package com.jibe.repository;
 
 
 import com.jibe.entity.User;
+import com.jibe.repository.impl.Repository;
 
 import java.util.List;
 import java.util.Map;
@@ -14,13 +15,12 @@ import java.util.ArrayList;
  *
  * @author Win11
  */
-public class UserRepository {
+public class UserRepository implements Repository<User, Long> {
     
    private final Map<Long, User> users = new HashMap<>();
    
-   
-   public void save(long userId, User user) {
-       
+   @Override
+   public void save(User user, Long userId) {
        users.put(userId, user);
    }
    

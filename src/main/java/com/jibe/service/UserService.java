@@ -1,16 +1,14 @@
 package com.jibe.service;
 
 
-import com.jibe.exceptions.BankAccountDoNotExistsException;
-import com.jibe.exceptions.InvalidPasscodeException;
-import com.jibe.exceptions.PasscodeNotMatchException;
-import com.jibe.exceptions.UserNotFoundException;
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.User;
+import com.jibe.exceptions.*;
 import com.jibe.repository.UserRepository;
 import com.jibe.util.SecurityUtil;
 
-import java.util.*;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  *
@@ -30,16 +28,21 @@ public class UserService {
 
 
     //Registration
-    public User registerUser(String fullName, String email, String passcode, String passcodeConfirmation) throws PasscodeNotMatchException {
+    public User registerUser(String fullName,
+                             String email,
+                             String passcode,
+                             String passcodeConfirmation) throws Exception {
+
+        if (isEmailExists(email)) throw new EmailAlreadyExistsException("Email already exists");
 
         if (!passcode.equals(passcodeConfirmation)) throw new PasscodeNotMatchException("Passcode not match!");
 
         var hiddenPasscode = securityUtil.hashPasscode(passcode);
 
-
         var newUser = new User(fullName, email, autoSetId, hiddenPasscode);
 
-        users.save(autoSetId, newUser);
+
+        users.save(newUser, autoSetId);
 
         autoSetId++;
 
@@ -75,8 +78,8 @@ public class UserService {
     public User findUserById(long id) throws UserNotFoundException {
 
 
-         return users.findUserById(id)
-                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
+        return users.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
     }
 
