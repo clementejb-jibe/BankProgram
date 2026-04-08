@@ -2,6 +2,7 @@ package com.jibe.repository;
 
 
 import com.jibe.entity.User;
+import com.jibe.exceptions.EmailAlreadyExistsException;
 import com.jibe.repository.impl.Repository;
 
 import java.util.List;
@@ -23,7 +24,12 @@ public class UserRepository implements Repository<User, Long> {
    public void save(User user, Long userId) {
        users.put(userId, user);
    }
-   
+
+   public boolean isEmailExists(String email) {
+       return users.values()
+               .stream()
+       .anyMatch(u -> u.getEmail().equals(email));
+   }
    
    public Optional<User> findUserById(long userId) {
        return Optional.ofNullable(users.get(userId));

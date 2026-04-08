@@ -8,7 +8,7 @@ import com.jibe.entity.User;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
 import com.jibe.ui.BankAccountUI;
-import com.jibe.ui.MenuUserImp;
+import com.jibe.ui.impl.MenuUserImp;
 import com.jibe.util.InputHandler;
 
 

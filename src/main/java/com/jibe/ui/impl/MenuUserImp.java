@@ -1,4 +1,4 @@
-package com.jibe.ui;
+package com.jibe.ui.impl;
 
 public interface MenuUserImp {
      void showMenu();

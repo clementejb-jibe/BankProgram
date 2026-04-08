@@ -1,5 +1,7 @@
 package com.jibe.ui;
 
+import com.jibe.ui.impl.MenuUserImp;
+
 public class UserUI implements MenuUserImp {
     public void showMenu() {
         System.out.println("""

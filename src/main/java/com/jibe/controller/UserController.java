@@ -5,7 +5,7 @@
 package com.jibe.controller;
 
 
-import com.jibe.ui.MenuUserImp;
+import com.jibe.ui.impl.MenuUserImp;
 import com.jibe.controller.impl.BankAccountControllerImp;
 import com.jibe.controller.impl.UserControllerImp;
 import com.jibe.exceptions.*;
@@ -115,10 +115,10 @@ public class UserController implements UserControllerImp {
                 var newUser = userService.registerUser(enteredFullName.toUpperCase(), enteredEmail, enteredPasscode, passcodeConfirmation);
                 System.out.println("Account created successfully. Your user id is: " + newUser.getUserId());
                 return;
-            } catch (PasscodeNotMatchException e) {
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
-
             }
+
         }
 
 

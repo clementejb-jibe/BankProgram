@@ -16,7 +16,7 @@ import com.jibe.controller.impl.UserControllerImp;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.UserService;
 import com.jibe.ui.BankAccountUI;
-import com.jibe.ui.MenuUserImp;
+import com.jibe.ui.impl.MenuUserImp;
 import com.jibe.ui.UserUI;
 import com.jibe.util.SecurityUtil;
 

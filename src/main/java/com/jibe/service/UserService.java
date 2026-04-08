@@ -16,12 +16,12 @@ import java.util.List;
  */
 public class UserService {
 
-    private final UserRepository users;
+    private final UserRepository userRepository;
     private long autoSetId = 1001;
     private final SecurityUtil securityUtil;
 
     public UserService(UserRepository userRepository, SecurityUtil securityUtil) {
-        this.users = userRepository;
+        this.userRepository = userRepository;
         this.securityUtil = securityUtil;
 
     }
@@ -42,7 +42,7 @@ public class UserService {
         var newUser = new User(fullName, email, autoSetId, hiddenPasscode);
 
 
-        users.save(newUser, autoSetId);
+        userRepository.save(newUser, autoSetId);
 
         autoSetId++;
 
@@ -71,27 +71,21 @@ public class UserService {
     }
 
     public List<User> getAll() {
-        return users.getAll();
+        return userRepository.getAll();
     }
 
 
     public User findUserById(long id) throws UserNotFoundException {
 
 
-        return users.findUserById(id)
+        return userRepository.findUserById(id)
                 .orElseThrow(() -> new UserNotFoundException("User not found!"));
 
     }
 
     //Data Validation (Email)
     public boolean isEmailExists(String email) {
-
-        for (var u : users.getAll()) {
-            if (u.getEmail().equals(email)) {
-            return true;
-            }
-        }
-        return false;
+        return userRepository.isEmailExists(email);
     }
 
 
