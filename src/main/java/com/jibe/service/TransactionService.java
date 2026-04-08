@@ -7,6 +7,8 @@ import com.jibe.exceptions.EmptyTransactionException;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.repository.TransactionRepository;
 import com.jibe.service.impl.TransactionStrategy;
+import com.jibe.service.strategy.DepositStrategy;
+import com.jibe.service.strategy.WithdrawStrategy;
 
 import java.util.List;
 

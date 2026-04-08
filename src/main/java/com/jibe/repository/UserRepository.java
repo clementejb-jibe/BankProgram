@@ -2,7 +2,6 @@ package com.jibe.repository;
 
 
 import com.jibe.entity.User;
-import com.jibe.exceptions.EmailAlreadyExistsException;
 import com.jibe.repository.impl.Repository;
 
 import java.util.List;

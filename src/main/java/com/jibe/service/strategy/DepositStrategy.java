@@ -1,4 +1,4 @@
-package com.jibe.service;
+package com.jibe.service.strategy;
 
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.Transaction;
@@ -8,23 +8,23 @@ import com.jibe.repository.TransactionRepository;
 import com.jibe.service.impl.TransactionStrategy;
 
 /**
- * A concrete implementation of {@link TransactionStrategy} that handles withdrawal transactions.
+ * A concrete implementation of {@link TransactionStrategy} that handles deposit transactions.
  *
- * <p>When executed, this strategy deducts the specified amount from the bank account's
+ * <p>When executed, this strategy adds the specified amount to the bank account's
  * current balance and records the transaction in the repository.</p>
  *
  * <p>Example usage:</p>
  * <pre>
- *   TransactionStrategy withdrawal = new WithdrawalStrategy(transactionRepository);
- *   withdrawal.process(myAccount, 500.00);
+ *   TransactionStrategy deposit = new DepositStrategy(transactionRepository);
+ *   deposit.process(myAccount, 1000.00);
  * </pre>
  */
 
-public class WithdrawStrategy implements TransactionStrategy {
+public class DepositStrategy implements TransactionStrategy {
 
     private final TransactionRepository transactionRepository;
 
-    public WithdrawStrategy(TransactionRepository transactionRepository) {
+    public DepositStrategy(TransactionRepository transactionRepository) {
         this.transactionRepository = transactionRepository;
     }
 
@@ -34,17 +34,13 @@ public class WithdrawStrategy implements TransactionStrategy {
             throw new InvalidAmountException("Amount must be greater than 0");
         }
 
-        if (bankAccount.getBalance() < amount) {
-            throw new InvalidAmountException("Balance is insufficient");
-        }
+        bankAccount.setBalance(bankAccount.getBalance() + amount);
 
-        bankAccount.setBalance(bankAccount.getBalance() - amount);
 
         transactionRepository.save(
                 new Transaction(
-                        TransactionType.WITHDRAW,
-                    bankAccount.getAccountNumber(),
-                    amount
-        ));
+                        TransactionType.DEPOSIT,
+                        bankAccount.getAccountNumber(),
+                        amount));
     }
 }

@@ -1,4 +1,4 @@
-package com.jibe.service;
+package com.jibe.service.strategy;
 
 import com.jibe.entity.BankAccount;
 import com.jibe.entity.Transaction;

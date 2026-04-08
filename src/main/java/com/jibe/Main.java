@@ -7,7 +7,7 @@ import com.jibe.repository.BankAccountRepository;
 import com.jibe.repository.TransactionRepository;
 import com.jibe.repository.UserRepository;
 import com.jibe.service.TransactionService;
-import com.jibe.service.TransferService;
+import com.jibe.service.strategy.TransferService;
 import com.jibe.ui.TransactionUI;
 import com.jibe.util.InputHandler;
 import com.jibe.controller.UserController;

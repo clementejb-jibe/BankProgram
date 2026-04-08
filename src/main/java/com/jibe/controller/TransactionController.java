@@ -7,7 +7,7 @@ import com.jibe.exceptions.EmptyTransactionException;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.service.BankAccountService;
 import com.jibe.service.TransactionService;
-import com.jibe.service.TransferService;
+import com.jibe.service.strategy.TransferService;
 import com.jibe.ui.TransactionUI;
 import com.jibe.util.InputHandler;
 
