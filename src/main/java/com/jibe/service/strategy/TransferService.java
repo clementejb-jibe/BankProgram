@@ -5,6 +5,7 @@ import com.jibe.entity.Transaction;
 import com.jibe.entity.TransactionType;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.repository.TransactionRepository;
+import com.jibe.util.TransactionIdGenerator;
 
 public class TransferService {
     private final TransactionRepository transactionRepository;
@@ -16,6 +17,7 @@ public class TransferService {
 
     public void transfer(BankAccount from, BankAccount to, double amount) throws InvalidAmountException {
 
+        var transactionId = TransactionIdGenerator.generate();
 
         if (amount <= 0) {
             throw new InvalidAmountException("Amount must be greater than zero");
@@ -29,20 +31,24 @@ public class TransferService {
 
         to.setBalance(to.getBalance() + amount);
 
-        var senderTransaction = new Transaction(
-                TransactionType.TRANSFER,
-                from.getAccountNumber(),
-                amount
-        );
 
-        var receiverTransaction = new Transaction(
-                TransactionType.TRANSFER,
-                to.getAccountNumber(),
-                amount
-        );
+        //Save the Sender's transaction
+        transactionRepository.save(
+                new Transaction(
+                        TransactionType.TRANSFER,
+                        transactionId,
+                        from.getAccountNumber(),
+                        amount),
+                transactionId);
 
-        transactionRepository.save(senderTransaction);
-        transactionRepository.save(receiverTransaction);
+        //Save the Receiver's transaction
+        transactionRepository.save(
+                new Transaction(
+                    TransactionType.TRANSFER,
+                    transactionId,
+                    to.getAccountNumber(),
+                    amount),
+                transactionId);
 
 
     }

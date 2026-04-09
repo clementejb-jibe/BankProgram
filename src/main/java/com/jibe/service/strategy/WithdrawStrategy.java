@@ -6,6 +6,7 @@ import com.jibe.entity.TransactionType;
 import com.jibe.exceptions.InvalidAmountException;
 import com.jibe.repository.TransactionRepository;
 import com.jibe.service.impl.TransactionStrategy;
+import com.jibe.util.TransactionIdGenerator;
 
 /**
  * A concrete implementation of {@link TransactionStrategy} that handles withdrawal transactions.
@@ -30,6 +31,8 @@ public class WithdrawStrategy implements TransactionStrategy {
 
     @Override
     public void process(BankAccount bankAccount, double amount) throws InvalidAmountException {
+        var transactionId = TransactionIdGenerator.generate();
+
         if (amount <= 0) {
             throw new InvalidAmountException("Amount must be greater than 0");
         }
@@ -43,8 +46,9 @@ public class WithdrawStrategy implements TransactionStrategy {
         transactionRepository.save(
                 new Transaction(
                         TransactionType.WITHDRAW,
+                    transactionId,
                     bankAccount.getAccountNumber(),
                     amount
-        ));
+        ), transactionId);
     }
 }

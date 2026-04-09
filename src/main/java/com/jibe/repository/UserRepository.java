@@ -18,8 +18,11 @@ import java.util.ArrayList;
 public class UserRepository implements Repository<User, Long> {
     
    private final Map<Long, User> users = new HashMap<>();
-   
-   @Override
+
+    public UserRepository() {
+    }
+
+    @Override
    public void save(User user, Long userId) {
        users.put(userId, user);
    }

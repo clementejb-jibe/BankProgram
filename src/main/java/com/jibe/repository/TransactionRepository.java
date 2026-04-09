@@ -1,21 +1,24 @@
 package com.jibe.repository;
 
 import com.jibe.entity.Transaction;
+import com.jibe.repository.impl.Repository;
 
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class TransactionRepository {
-    private final List<Transaction> transactions = new ArrayList<>();
+public class TransactionRepository implements Repository<Transaction, Long> {
+    private final Map<Long, Transaction> transactions = new HashMap<>();
 
-
-    public void save(Transaction transaction) {
-        this.transactions.add(transaction);
+    @Override
+    public void save(Transaction transaction, Long transactionId) {
+        this.transactions.put(transaction.transactionId(), transaction);
     }
 
     // Get All transactions of single bank account
     public List<Transaction> findByAccountNumber(long accountNumber) {
-        return transactions.stream()
+        return transactions.values()
+                .stream()
                 .filter(t -> t.accountNumber() == accountNumber)
                 .toList();
     }
